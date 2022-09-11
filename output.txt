@@ -1,0 +1,3 @@
+
+SHIFT : CDEFGHIJKLMNOPQRSTUVWXYABC
+SHIFT : fghijklmnopqrstuvwxyzxyabc

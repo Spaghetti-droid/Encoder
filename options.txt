@@ -1,0 +1,15 @@
+# input and output paths
+input 	: 	input.txt
+output 	: 	output.txt
+
+# Encoder name. Currently available are
+# 	- TO_MORSE : encodes ascii to morse
+# Planned
+#	- FROM_MORSE : encodes morse to ascii
+#	- SHIFT: shifts all chars by a given number
+#	- RSA : encodes as RSA with randomly generated key pair
+
+encoder	:	SHIFT
+shift 	: 	5
+min_char:	a
+max_char:	z	

@@ -42,7 +42,7 @@ public class OptionParser {
 	}
 	
 	
-	private static final Pattern OPTION_PATTERN = Pattern.compile("(\\w+)\\s*:\\s*([^\\s]+)\\s*");
+	private static final Pattern OPTION_PATTERN = Pattern.compile("(\\w+)\\s*:\\s*([^\\s].*[^\\s])\\s*");
 	private static final String INPUT_KEY = "input";
 	private static final String OUTPUT_KEY = "output";
 	private static final String ENCODER_KEY = "encoder";

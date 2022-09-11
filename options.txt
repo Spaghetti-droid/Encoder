@@ -3,13 +3,23 @@ input 	: 	input.txt
 output 	: 	output.txt
 
 # Encoder name. Currently available are
-# 	- TO_MORSE : encodes ascii to morse
-# Planned
-#	- FROM_MORSE : encodes morse to ascii
 #	- SHIFT: shifts all chars by a given number
+#	- SUB: substitutes patterns based on a dictionary
+# Planned	
 #	- RSA : encodes as RSA with randomly generated key pair
 
-encoder	:	SHIFT
-shift 	: 	5
-min_char:	a
-max_char:	z	
+encoder	:	SUB
+
+# SHIFT options - shift will loop at char limits if specified (eg z -> a if min_char=a and max_char=z)
+# Amount shifted - 1 is used if not specified
+#shift 	: 	5
+# Lowest char - no limit if not specified
+#min_char:	a
+# highest char - no limit if not specified
+#max_char:	z	
+
+# SUB options
+dictionary_path	:	dictionaries/test-contract.txt
+# The string to replace patterns (characters) that aren't in the dictionary
+# Comment to keep leave unknown patterns unchanged
+#default_if_unknown: 	"?"

@@ -1,4 +1,4 @@
-package fun.gbr.logic;
+package fun.gbr.encoders;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -28,8 +28,8 @@ public class EncoderFactory {
 	
 	private static final Map<String, Class<? extends Encoder>> REGISTRY = new HashMap<>();
 	static {
-		REGISTRY.put("TO_MORSE", ToMorseEncoder.class);
 		REGISTRY.put("SHIFT", ShiftEncoder.class);
+		REGISTRY.put("SUB", SubstitutionEncoder.class);
 	}
 	
 }

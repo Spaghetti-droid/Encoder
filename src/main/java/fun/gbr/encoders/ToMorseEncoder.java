@@ -1,4 +1,4 @@
-package fun.gbr.logic;
+package fun.gbr.encoders;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

@@ -1,4 +1,4 @@
-package fun.gbr.logic;
+package fun.gbr.encoders;
 
 /**
  * A 1-shift encoder

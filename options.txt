@@ -1,3 +1,5 @@
+# Mode: encode or decode. Decode assumes you want to decode a message that was encoded based on these options
+mode	:	decode
 # input and output paths
 input 	: 	input.txt
 output 	: 	output.txt
@@ -19,7 +21,7 @@ encoder	:	SUB
 #max_char:	z	
 
 # SUB options
-dictionary_path	:	dictionaries/test-contract.txt
+dictionary_path	:	dictionaries/simple.txt
 # The string to replace patterns (characters) that aren't in the dictionary
 # Comment to keep leave unknown patterns unchanged
 #default_if_unknown: 	"?"

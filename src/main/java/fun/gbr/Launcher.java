@@ -4,6 +4,7 @@ import fun.gbr.encoders.EncoderFactory;
 import fun.gbr.io.FetcherFactory;
 import fun.gbr.io.ReturnerFactory;
 import fun.gbr.options.OptionManager;
+import fun.gbr.options.Options.Mode;
 
 /**
  * A minimalist encoder
@@ -30,7 +31,7 @@ public class Launcher {
 		// Call encoder
 		
 		String encoded = EncoderFactory.build().convert(text);
-		System.out.println("Encoded as: " + encoded);
+		System.out.println(Mode.encode.equals(OptionManager.get().getMode()) ? "Encoded as " : "Decoded to " + encoded);
 		
 		// Output encoded
 

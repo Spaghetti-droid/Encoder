@@ -1,5 +1,8 @@
 package fun.gbr.encoders;
 
+import fun.gbr.options.OptionManager;
+import fun.gbr.options.Options.Mode;
+
 /**
  * A 1-shift encoder
  *
@@ -13,6 +16,10 @@ public class ShiftEncoder implements Encoder {
 	public ShiftEncoder() {
 		if (System.getProperty(SHIFT_KEY) != null) {
 			shift = Integer.valueOf(System.getProperty(SHIFT_KEY));
+		}
+		
+		if(Mode.decode.equals(OptionManager.get().getMode())) {
+			shift = -shift;
 		}
 
 		if (System.getProperty(MIN_CHAR_KEY) != null) {

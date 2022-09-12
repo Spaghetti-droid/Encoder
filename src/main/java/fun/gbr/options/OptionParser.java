@@ -35,6 +35,9 @@ public class OptionParser {
 		case ENCODER_KEY:
 			opt.setEncoder(value);
 			break;
+		case MODE_KEY:
+			opt.setMode(value);
+			break;
 		default:
 			// Treat as encoder specific option
 			System.setProperty(key, value);
@@ -46,5 +49,6 @@ public class OptionParser {
 	private static final String INPUT_KEY = "input";
 	private static final String OUTPUT_KEY = "output";
 	private static final String ENCODER_KEY = "encoder";
+	private static final String MODE_KEY = "mode";
 
 }

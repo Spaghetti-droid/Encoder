@@ -13,6 +13,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import fun.gbr.options.OptionManager;
+import fun.gbr.options.Options.Mode;
+
 public class SubstitutionEncoder implements Encoder {
 
 	private String def;
@@ -40,11 +43,20 @@ public class SubstitutionEncoder implements Encoder {
 	
 	private void loadDictionary(Path dictionaryPath) throws IOException {
 		List<String> lines = Files.readAllLines(dictionaryPath);
+		int keyGroup;
+		int valueGroup;
+		if(Mode.encode.equals(OptionManager.get().getMode())) {
+			keyGroup = 1;
+			valueGroup = 2;
+		} else {
+			keyGroup = 2;
+			valueGroup = 1;
+		}
 		this.dictionary = new HashMap<>(lines.size());
 		for(String line : lines) {
 			Matcher matcher = DICTIONARY_ENTRY_PATTERN.matcher(line);
 			if(matcher.matches()) {
-				this.dictionary.put(matcher.group(1), matcher.group(2));
+				this.dictionary.put(matcher.group(keyGroup), matcher.group(valueGroup));
 			} else {
 				System.err.println("Unparsed line in dictionary: " + line);
 			}

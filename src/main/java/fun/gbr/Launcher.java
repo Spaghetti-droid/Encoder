@@ -31,13 +31,13 @@ public class Launcher {
 		// Call encoder
 		
 		String encoded = EncoderFactory.build().convert(text);
-		System.out.println(Mode.encode.equals(OptionManager.get().getMode()) ? "Encoded as " : "Decoded to " + encoded);
+		System.out.println((Mode.encode.equals(OptionManager.get().getMode()) ? "Encoded as " : "Decoded to ") + encoded);
 		
 		// Output encoded
 
 		System.out.println("Writing to " + OptionManager.get().getOutput().toAbsolutePath());
 		
-		ReturnerFactory.build().writeOut(OptionManager.get().getEncoderKey() + " : " + encoded + '\n');
+		ReturnerFactory.build().writeOut(OptionManager.get().getMode() + " - " +OptionManager.get().getEncoderKey() + " : " + encoded + '\n');
 		
 		System.out.println("Done");
 	}

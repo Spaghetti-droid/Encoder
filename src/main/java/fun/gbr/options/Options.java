@@ -38,10 +38,10 @@ public class Options {
 	public void setMode(String mode) {
 		this.mode = Mode.valueOf(mode);
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Options [input=" + input + ", output=" + output + ", encoder=" + encoder + "]";
+		return "Options [input=" + input + ", output=" + output + ", encoder=" + encoder + ", mode=" + mode + "]";
 	}
 
 	private static final Path DEFAULT_INPUT = Path.of("input.txt");

@@ -42,21 +42,28 @@ public class SubstitutionDictionaryMaker {
 				}
 				String value = uih.treatUserInput(scanner, "Value: ");
 				
-				dictionary.put("\"" + key + "\"", "\"" + value + "\"");
+				dictionary.put(key, value);
 			}
 			
-			System.out.println("Writing to " + path.toAbsolutePath());
+			write(dictionary, path);
 			
-			String text = dictionary.entrySet().stream()
-					.map(entry -> entry.getKey() + "\t" + entry.getValue())
-					.collect(Collectors.joining(System.lineSeparator()));
-			Files.writeString(path, text);
 		} catch (UserQuit q) {
 			System.err.println("Exiting: user quit");
 		}
 		
 		System.out.println("Done");
 
+	}
+	
+	public static void write(Map<String, String> dictionary, Path path) throws IOException {
+		System.out.println("Writing to " + path.toAbsolutePath());
+		
+		String text = dictionary.entrySet().stream()
+				.map(entry -> "\"" + entry.getKey() + "\"" + "\t" + "\"" + entry.getValue() + "\"")
+				.collect(Collectors.joining(System.lineSeparator()));
+		Files.writeString(path, text);
+		
+		System.out.println("Done");
 	}
 
 }

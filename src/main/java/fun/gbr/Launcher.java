@@ -10,6 +10,8 @@ import fun.gbr.options.Options.Mode;
  * A minimalist encoder
  * 
  * TODO
+ * - Hierarchical option file handling. 1 main and 1 per encoder
+ * - Only use random sub if file doesn't exist
  * - Comment
  * - logs
  * - more encoders

@@ -7,8 +7,17 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Parses the user option file 
+ *
+ */
 public class OptionParser {	
 	
+	/** Parse file options into an options object and the system properties
+	 * @param optionFilePath
+	 * @return
+	 * @throws IOException
+	 */
 	public static Options parse(Path optionFilePath) throws IOException {
 		List<String> lines = Files.lines(optionFilePath)
 				.toList();
@@ -24,6 +33,11 @@ public class OptionParser {
 		return opt;		
 	}
 	
+	/** Records the option given by key and value.
+	 * @param key
+	 * @param value
+	 * @param opt
+	 */
 	private static void setOption(String key, String value, Options opt) {
 		switch (key) {
 		case INPUT_KEY: 
@@ -50,5 +64,4 @@ public class OptionParser {
 	private static final String OUTPUT_KEY = "output";
 	private static final String ENCODER_KEY = "encoder";
 	private static final String MODE_KEY = "mode";
-
 }

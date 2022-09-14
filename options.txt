@@ -25,9 +25,8 @@ encoder	:	SUB
 
 ### SUB options ###
 dictionary_path	:	dictionaries/ascii.txt
-# Use this to generate a random dictionary in dictionary_path.
-# WARNING overwrites any dictionary that might have been there before
-generate_random_dictionary : true
+# Use this to generate a random dictionary in dictionary_path, if no dictionary exists.
+generate_dictionary_if_absent : true
 # Decimal UTF-8 codes for keys to use for example, 65-90 specifies that we want all letters from A to Z
 rand_key_range : 32-126
 # UTF-8 codes specifying the range of character which random dictionary generation can use as substitutes

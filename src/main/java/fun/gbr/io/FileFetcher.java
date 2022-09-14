@@ -5,6 +5,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Collectors;
 
+/**
+ * Reads the contents of an input file and outputs it as a string
+ *
+ */
 public class FileFetcher implements Fetcher {
 
 	private Path path;

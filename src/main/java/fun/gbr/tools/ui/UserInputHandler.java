@@ -5,6 +5,10 @@ import java.util.Scanner;
 import fun.gbr.tools.ui.QuitTrigger.EmptyQuitter;
 import fun.gbr.tools.ui.ResponseValidator.EmptyValidator;
 
+/**
+ * Class for prompting user and recovering their response
+ *
+ */
 public class UserInputHandler {
 	
 	private QuitTrigger quitter = new EmptyQuitter();

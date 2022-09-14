@@ -8,33 +8,34 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 
-import fun.gbr.options.OptionManager;
+import fun.gbr.options.Options;
 import fun.gbr.options.Options.Mode;
 
-public class DictionaryFromFileLoader implements DictionaryLoader {
+/**
+ * Reads dictionary file and loads its data
+ *
+ */
+public class DictionaryReader implements DictionaryLoader {
 
 	private Map<String, String> dictionary;
-
-	@Override
-	public DictionaryLoader load() throws IOException {
-		loadDictionary(getDictionaryPath());
-		return this;
-	}
+	private Path path;
 	
-	@Override
-	public Path getDictionaryPath() {
-		Path path = DictionaryLoader.super.getDictionaryPath();
+	public DictionaryReader(Path path) throws IOException {
+		this.path = path;
 		if(!Files.isReadable(path)) {
 			throw new IllegalArgumentException("Dictionary not readable: " + path.toAbsolutePath());
 		}
-		return path;
+		loadDictionary();
 	}
 
-	private void loadDictionary(Path dictionaryPath) throws IOException {
-		List<String> lines = Files.readAllLines(dictionaryPath);
+	/** Read and parse the dictionary from file
+	 * @throws IOException
+	 */
+	private void loadDictionary() throws IOException {
+		List<String> lines = Files.readAllLines(path);
 		int keyGroup;
 		int valueGroup;
-		if(Mode.encode.equals(OptionManager.get().getMode())) {
+		if(Mode.encode.equals(Options.get().getMode())) {
 			keyGroup = 1;
 			valueGroup = 2;
 		} else {

@@ -4,12 +4,17 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import fun.gbr.options.OptionManager;
+import fun.gbr.options.Options;
 
-public class EncoderFactory {
+/**
+ * Class in charge of selecting the correct encoder for the task given by the user
+ * All encoders have to be registered in the REGISTRY in order to be usable by this program
+ *
+ */
+public class EncoderSelector {
 	
 	public static Encoder build() {
-		return build(OptionManager.get().getEncoderKey());
+		return build(Options.get().getEncoderKey());
 	}
 
 	public static Encoder build(String encoderKey) {

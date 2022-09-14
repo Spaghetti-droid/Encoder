@@ -1,10 +1,10 @@
 package fun.gbr.encoders;
 
-import fun.gbr.options.OptionManager;
+import fun.gbr.options.Options;
 import fun.gbr.options.Options.Mode;
 
 /**
- * A 1-shift encoder
+ * A shift encoder. Shifts all characters around the alphabet by an equal amount
  *
  */
 public class ShiftEncoder implements Encoder {
@@ -18,7 +18,7 @@ public class ShiftEncoder implements Encoder {
 			shift = Integer.valueOf(System.getProperty(SHIFT_KEY));
 		}
 		
-		if(Mode.decode.equals(OptionManager.get().getMode())) {
+		if(Mode.decode.equals(Options.get().getMode())) {
 			shift = -shift;
 		}
 

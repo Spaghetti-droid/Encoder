@@ -5,11 +5,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
-import fun.gbr.options.OptionManager;
+import fun.gbr.options.Options;
 
+/**
+ * Writes text to a file
+ *
+ */
 public class FileReturner implements Returner {
 	
-	private Path output = OptionManager.get().getOutput();
+	private Path output = Options.get().getOutput();
 	
 	public FileReturner() {}
 	

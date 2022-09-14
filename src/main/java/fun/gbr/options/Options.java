@@ -1,8 +1,31 @@
 package fun.gbr.options;
 
+import java.io.IOException;
 import java.nio.file.Path;
 
+/**
+ * Represents the main options that will always be needed
+ *
+ */
 public class Options {
+	
+	// Singleton management
+	
+	private static Options SINGLETON; 
+	
+	public static Options get() {
+		if(SINGLETON == null) {
+			try {
+				SINGLETON = OptionParser.parse(OPTION_FILE_PATH);
+				System.out.println("Loaded " + SINGLETON);
+			} catch (IOException e) {
+				throw new RuntimeException("Failed to load options on path: " + OPTION_FILE_PATH.toAbsolutePath(), e);
+			}
+		}
+		return SINGLETON;
+	}
+	
+	// Options object
 	
 	private Path input = DEFAULT_INPUT;
 	private Path output = DEFAULT_OUTPUT;
@@ -46,6 +69,7 @@ public class Options {
 
 	private static final Path DEFAULT_INPUT = Path.of("input.txt");
 	private static final Path DEFAULT_OUTPUT = Path.of("output.txt");
+	private static final Path OPTION_FILE_PATH = Path.of("options.txt");
 
 	public static enum Mode{
 		encode,

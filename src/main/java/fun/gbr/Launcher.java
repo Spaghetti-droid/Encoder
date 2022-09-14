@@ -1,24 +1,20 @@
 package fun.gbr;
 
-import fun.gbr.encoders.EncoderFactory;
+import fun.gbr.encoders.EncoderSelector;
 import fun.gbr.io.FetcherFactory;
 import fun.gbr.io.ReturnerFactory;
-import fun.gbr.options.OptionManager;
+import fun.gbr.options.Options;
 import fun.gbr.options.Options.Mode;
 
 /**
- * A minimalist encoder
+ * A modular encoder with no ui
  * 
  * TODO
  * - Hierarchical option file handling. 1 main and 1 per encoder
- * - Only use random sub if file doesn't exist
  * - Comment
  * - logs
  * - more encoders
- * - Random sub cipher?
  * - decoders
- * - Separate encoder options as from-to?
- * - create moduled encoder which generates conversion map on the fly based on Unicode equivalent?
  *
  */
 public class Launcher {
@@ -32,14 +28,14 @@ public class Launcher {
 		
 		// Call encoder
 		
-		String encoded = EncoderFactory.build().convert(text);
-		System.out.println((Mode.encode.equals(OptionManager.get().getMode()) ? "Encoded as " : "Decoded to ") + encoded);
+		String encoded = EncoderSelector.build().convert(text);
+		System.out.println((Mode.encode.equals(Options.get().getMode()) ? "Encoded as " : "Decoded to ") + encoded);
 		
 		// Output encoded
 
-		System.out.println("Writing to " + OptionManager.get().getOutput().toAbsolutePath());
+		System.out.println("Writing to " + Options.get().getOutput().toAbsolutePath());
 		
-		ReturnerFactory.build().writeOut(OptionManager.get().getMode() + " - " +OptionManager.get().getEncoderKey() + " : " + encoded + '\n');
+		ReturnerFactory.build().writeOut(Options.get().getMode() + " - " + Options.get().getEncoderKey() + " : " + encoded + '\n');
 		
 		System.out.println("Done");
 	}

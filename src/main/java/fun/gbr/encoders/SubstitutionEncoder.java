@@ -12,22 +12,31 @@ import java.util.stream.IntStream;
 
 import fun.gbr.io.dictionaries.DictionaryLoader;
 
+/**
+ * Encodes using substitution
+ *
+ */
 public class SubstitutionEncoder implements Encoder {
 
-	private String def;
+	/**
+	 * The value to use by default if a key isn't in the dictionary
+	 * null if no substitution should be made in that case 
+	 */
+	private String defaultSub;
 	private Map<String, String> dictionary;
 	
 	public SubstitutionEncoder() throws IOException {
-		this.dictionary = DictionaryLoader.getLoader().load().get();
+		this.dictionary = DictionaryLoader.initialise().get();
 		initDefaultString();
 	}
 	
-
-	
+	/**
+	 * Get the default value from properties
+	 */
 	private void initDefaultString() {
 		Matcher matcher = DEF_KEY_PATTERN.matcher(System.getProperty(DEFAULT_KEY, ""));
 		if(matcher.matches()) {
-			this.def = matcher.group(1);
+			this.defaultSub = matcher.group(1);
 		}
 	}
 	
@@ -40,67 +49,106 @@ public class SubstitutionEncoder implements Encoder {
 			subH.substitute(entry.getKey(), entry.getValue());
 		}
 		
-		return subH.getEncoded(def);
+		return subH.getEncoded(defaultSub);
 	}
 
 	private static final String DEFAULT_KEY = "default_if_unknown";
 	private static final Pattern DEF_KEY_PATTERN = Pattern.compile("\"(.+)\"");
 	
+	/**
+	 * Handles and stores substitutions
+	 *
+	 */
 	private static class SubstitutionHandler{
 		
-		private String orig;
+		private String text;
 		private List<Integer> positions;
-		private SortedMap<Integer, String> positionVsTo;
-		public SubstitutionHandler(String orig) {
+		private SortedMap<Integer, String> positionVsNewValue;
+		/**
+		 * @param text The String to be transformed
+		 */
+		public SubstitutionHandler(String text) {
 			super();
-			this.orig = orig;
-			this.positions = IntStream.rangeClosed(0, orig.length()-1)
+			this.text = text;
+			this.positions = IntStream.rangeClosed(0, text.length()-1)
 								.boxed().collect(Collectors.toList());
-			this.positionVsTo = new TreeMap<>();
+			this.positionVsNewValue = new TreeMap<>();
 		}
 		
+		/**
+		 * @return true if all text has been transformed
+		 */
 		public boolean isDone() {
-			return orig.isEmpty();
+			return text.isEmpty();
 		}
 		
+		/** Substitute all instances of <from> in the text with <to>
+		 * TODO WARNING If <from> has more than 1 character, 
+		 *  there is a risk of substitutions happening on the overlap of 2 keys!
+		 * @param from
+		 * @param to
+		 */
 		public void substitute(String from, String to) {
 			int start;
-			while((start = orig.indexOf(from)) != -1) {				
-				positionVsTo.put(positions.get(start), to);
+			while((start = text.indexOf(from)) != -1) {				
+				positionVsNewValue.put(positions.get(start), to);
 				for(int i = start+from.length()-1; i>=start; --i) { //backwards to avoid out of bounds
 					positions.remove(i);
 				}
-				orig = orig.replaceFirst(Pattern.quote(from), "");
+				text = text.replaceFirst(Pattern.quote(from), "");
 			}
 		}
 		
+		/** Return the transformed version of the initial text
+		 * Note calling this before isDone() == true will result in an incomplete transformation
+		 * @param def
+		 * @return
+		 */
 		public String getEncoded(String def) {
-			if(!orig.isEmpty()) {
-				if(def != null) {
-					handleUnknowns(def);
-				} else {
-					handleUnknowns();
-				}				
-			}
-			
+			// forOut is positionVsNewValue with unprocessed text added in
+			SortedMap<Integer, String> forOut = makeOutputMap(def);			
+			// Each component of the new string is associated to a position in text
+			// In the end, all we need to do is stick everything together in order
 			StringBuilder encoded = new StringBuilder();
-			positionVsTo.forEach((k,v) -> encoded.append(v));
+			forOut.forEach((k,v) -> encoded.append(v));
 			
 			return encoded.toString();
 		}
 		
-		private void handleUnknowns() {
-			for(int i=0; i<orig.length(); i++) {
-				positionVsTo.put(positions.get(i), String.valueOf(orig.charAt(i)));
+		/**
+		 * Adds unprocessed text to textPosToTransformed
+		 */
+		private void handleUnknowns(SortedMap<Integer, String> textPosToTransformed) {
+			for(int i=0; i<text.length(); i++) {
+				textPosToTransformed.put(positions.get(i), String.valueOf(text.charAt(i)));
 			}
 		}
 		
-		private void handleUnknowns(String def) {
-			for(int i=0; i<orig.length(); i++) {
-				positionVsTo.put(positions.get(i), def);
+		/** Adds def as a value for all positions which were not transformed to textPosToTransformed
+		 * @param def
+		 * @param textPosToTransformed
+		 */
+		private void handleUnknowns(String def, SortedMap<Integer, String> textPosToTransformed) {
+			for(int i=0; i<text.length(); i++) {
+				textPosToTransformed.put(positions.get(i), def);
 			}
 		}
 		
+		/**
+		 * @param def
+		 * @return a copy of positionVsNewValue containing extra elements for any unprocessed text
+		 */
+		private SortedMap<Integer, String> makeOutputMap(String def){
+			SortedMap<Integer, String> forOut = new TreeMap<>(positionVsNewValue);
+			if(text.isEmpty()) {
+				return forOut;
+			}
+			if(def == null) {
+				handleUnknowns(forOut);
+			} else {
+				handleUnknowns(def, forOut);			}
+			
+			return forOut;
+		}		
 	}
-
 }

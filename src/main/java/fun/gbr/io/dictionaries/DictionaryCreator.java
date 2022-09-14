@@ -14,19 +14,30 @@ import java.util.stream.IntStream;
 
 import fun.gbr.tools.SubstitutionDictionaryMaker;
 
-public class RandomisingDictionaryLoader implements DictionaryLoader {
+/**
+ * Generates a substitution dictionary and writes it to a file 
+ *
+ */
+public class DictionaryCreator implements DictionaryLoader {
 	
 	private static Random rand = new Random();
 	private Map<String, String> dictionary;
+	private Path path;
 	private Pair keyPair;
 	private Pair valuePair;
 
-	public RandomisingDictionaryLoader() {
+	public DictionaryCreator(Path path) throws IOException {
+		this.path = path;
 		this.keyPair = parseRange(System.getProperty(KEY_RANGE_KEY));
 		this.valuePair = parseRange(System.getProperty(VALUE_RANGE_KEY));	
 		this.dictionary = new HashMap<>(keyPair.max()-keyPair.min());
+		generate();
 	}
 	
+	/** Parses a user-input range
+	 * @param range
+	 * @return
+	 */
 	private static Pair parseRange(String range) {
 		if(range != null) {
 			Matcher matcher = RANGE_PATTERN.matcher(range);
@@ -44,12 +55,14 @@ public class RandomisingDictionaryLoader implements DictionaryLoader {
 		throw new IllegalArgumentException("Invalid range specification: " + range);
 	}
 	
-	@Override
-	public DictionaryLoader load() throws IOException {
+	/** Generate a dictionary file
+	 * @throws IOException
+	 */
+	private void generate() throws IOException {
 		
-		// Get and check dictionary path
+		// Create dictionary
 		
-		Path dictionaryPath = getDictionaryPath();
+		Files.createFile(path);
 		
 		// Fill dictionary
 		
@@ -63,17 +76,7 @@ public class RandomisingDictionaryLoader implements DictionaryLoader {
 		
 		// Write
 		
-		SubstitutionDictionaryMaker.write(dictionary, dictionaryPath);
-		return this;
-	}
-	
-	@Override
-	public Path getDictionaryPath() {
-		Path path = DictionaryLoader.super.getDictionaryPath();
-		if(Files.exists(path) && !Files.isWritable(path)) {
-			throw new IllegalArgumentException("Dictionary not writable: " + path.toAbsolutePath());
-		}
-		return path;
+		SubstitutionDictionaryMaker.write(dictionary, path);
 	}
 
 	@Override

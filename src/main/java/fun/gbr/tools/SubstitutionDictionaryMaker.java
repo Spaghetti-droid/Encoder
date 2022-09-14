@@ -12,6 +12,8 @@ import fun.gbr.tools.ui.UserInputHandler;
 import fun.gbr.tools.ui.UserQuit;
 
 /**
+ * A utility class for creating a dictionary in the correct format
+ * 
  * TODO
  * - Give option to append
  * - Warn if resetting previous value and display old value
@@ -19,6 +21,10 @@ import fun.gbr.tools.ui.UserQuit;
  */
 public class SubstitutionDictionaryMaker {
 
+	/** Can be useful if the user wants to manually create a cipher
+	 * @param args
+	 * @throws IOException
+	 */
 	public static void main(String[] args) throws IOException {
 		
 		System.out.println("Welcome let's make a substitution dictionary");
@@ -55,6 +61,11 @@ public class SubstitutionDictionaryMaker {
 
 	}
 	
+	/** Write dictionary to file at path
+	 * @param dictionary
+	 * @param path
+	 * @throws IOException
+	 */
 	public static void write(Map<String, String> dictionary, Path path) throws IOException {
 		System.out.println("Writing to " + path.toAbsolutePath());
 		
@@ -65,5 +76,4 @@ public class SubstitutionDictionaryMaker {
 		
 		System.out.println("Done");
 	}
-
 }

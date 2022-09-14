@@ -35,4 +35,4 @@ build/
 ### My Test files ###
 input.txt
 output.txt
-dictionaries/test*
+dictionaries/

@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import fun.gbr.Utils;
 import fun.gbr.options.Options;
 import fun.gbr.options.Options.Mode;
 
@@ -22,7 +23,7 @@ public interface DictionaryLoader {
 	 * @throws IOException
 	 */
 	public static DictionaryLoader initialise() throws IOException {
-		Path path = getDictionaryPath();
+		Path path = Utils.getDictionaryPath(DICTIONARY_PATH_KEY);
 		boolean dictionaryExists = Files.exists(path);
 		boolean generateRandom = Mode.decode.equals(Options.get().getMode()) 
 				|| (!dictionaryExists && DO_RANDOMISE_VALUE.equals(System.getProperty(RANDOMISE_KEY)));
@@ -32,19 +33,6 @@ public interface DictionaryLoader {
 		}
 		System.out.println("Writing new dictionary to \"" + path.toAbsolutePath() + "\"");
 		return new DictionaryCreator(path);
-	}
-	
-	/**
-	 * @return The path for the dictionary set by the user
-	 */
-	private static Path getDictionaryPath() {
-		String dic = System.getProperty(DICTIONARY_PATH_KEY);
-		if(dic == null) {
-			throw new IllegalArgumentException("Dictionary path not specified");
-		}
-
-		Path dictionaryPath = Path.of(dic);
-		return dictionaryPath;
 	}
 	
 	public static final String DICTIONARY_PATH_KEY = "dictionary_path";

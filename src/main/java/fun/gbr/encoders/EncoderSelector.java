@@ -35,6 +35,7 @@ public class EncoderSelector {
 	static {
 		REGISTRY.put("SHIFT", ShiftEncoder.class);
 		REGISTRY.put("SUB", SubstitutionEncoder.class);
+		REGISTRY.put("OTP", OTPEncoder.class);
 	}
 	
 }

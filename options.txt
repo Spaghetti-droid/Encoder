@@ -7,12 +7,12 @@ output 	: 	output.txt
 # Encoder name. Currently available are
 #	- SHIFT: shifts all chars by a given number
 #	- SUB: substitutes patterns based on a dictionary
+#	- OTP: Uses a one time pad to encode the string
 # Planned	
 #	- RSA : encodes as RSA with randomly generated key pair
-#	- OTP
 #	- TRANSLATE
 
-encoder	:	SUB
+encoder	:	OTP
 
 ### SHIFT options ### 
 # shift will loop at char limits if specified (eg z -> a if min_char=a and max_char=z)
@@ -34,3 +34,10 @@ rand_value_range : 32-126
 # The string to replace patterns (characters) that aren't in the dictionary
 # Comment to keep leave unknown patterns unchanged
 #default_if_unknown: 	"?"
+
+
+### OTP options ###
+otp_file_path : otp/otp.txt
+# Weird things happen when trying to copy-paste OTP-encoded text
+# Converting the encoded string to hex avoids this issue
+encoded_as_hex : true

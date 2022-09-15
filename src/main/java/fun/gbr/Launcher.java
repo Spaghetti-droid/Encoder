@@ -1,5 +1,7 @@
 package fun.gbr;
 
+import java.io.IOException;
+
 import fun.gbr.encoders.EncoderSelector;
 import fun.gbr.io.FetcherFactory;
 import fun.gbr.io.ReturnerFactory;
@@ -19,7 +21,7 @@ import fun.gbr.options.Options.Mode;
  */
 public class Launcher {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		
 		// Read input
 		

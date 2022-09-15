@@ -36,6 +36,7 @@ public class EncoderSelector {
 		REGISTRY.put("SHIFT", ShiftEncoder.class);
 		REGISTRY.put("SUB", SubstitutionEncoder.class);
 		REGISTRY.put("OTP", OTPEncoder.class);
+		REGISTRY.put("HEX", HexEncoder.class);
 	}
 	
 }

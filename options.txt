@@ -1,5 +1,5 @@
 # Mode: encode or decode. Decode assumes you want to decode a message that was encoded based on these options
-mode	:	encode
+mode	:	decode
 # input and output paths
 input 	: 	input.txt
 output 	: 	output.txt
@@ -8,11 +8,12 @@ output 	: 	output.txt
 #	- SHIFT: shifts all chars by a given number
 #	- SUB: substitutes patterns based on a dictionary
 #	- OTP: Uses a one time pad to encode the string
+#	- HEX: Encode string as hexadecimal number collection 
 # Planned	
 #	- RSA : encodes as RSA with randomly generated key pair
 #	- TRANSLATE
 
-encoder	:	OTP
+encoder	:	HEX
 
 ### SHIFT options ### 
 # shift will loop at char limits if specified (eg z -> a if min_char=a and max_char=z)

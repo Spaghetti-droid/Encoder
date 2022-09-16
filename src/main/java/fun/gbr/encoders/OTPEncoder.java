@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.BitSet;
 
 import org.apache.commons.codec.DecoderException;
@@ -43,7 +44,11 @@ public class OTPEncoder implements Encoder {
 		
 		byte[] encodedBytes = new byte[textBytes.length];
 		BitSet textBits = BitSet.valueOf(textBytes);
-		BitSet otpBits = BitSet.valueOf(Files.readAllBytes(otpPath));
+		BitSet otpBits;
+		try(var is = Files.newInputStream(otpPath, StandardOpenOption.READ)){
+			// Get a maximum of text length bytes from file as we don't need more
+			otpBits = BitSet.valueOf(is.readNBytes(textBytes.length));	
+		}
 		
 		int offset = 0;
 		for(int i=0; i<textBits.size(); i+=otpBits.size()) {

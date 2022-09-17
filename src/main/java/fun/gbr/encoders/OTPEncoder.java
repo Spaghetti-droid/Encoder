@@ -15,18 +15,24 @@ import fun.gbr.Utils;
 import fun.gbr.options.Options;
 import fun.gbr.options.Options.Mode;
 
+/**
+ * Encode and decode using One Time Pad
+ *
+ */
 public class OTPEncoder implements Encoder {
 	
 	private Path otpPath;
 	private boolean asHex;
 	private boolean decode;
-	private boolean generate;
+	private boolean generateOTP;
 	
 	public OTPEncoder(){
 		otpPath = Utils.getDictionaryPath(OTP_FILE_PATH_KEY);
 		decode = Mode.decode.equals(Options.get().getMode());
-		generate = "true".equals(System.getProperty(GENERATE_KEY)) && !decode && !Files.exists(otpPath);
-		if((!generate) && !Files.isReadable(otpPath)) {
+		generateOTP = "true".equals(System.getProperty(GENERATE_KEY)) 
+				&& !decode 
+				&& !Files.exists(otpPath);
+		if(!generateOTP && !Files.isReadable(otpPath)) {
 			throw new IllegalArgumentException("OTP not readable: " + otpPath.toAbsolutePath());
 		}
 		asHex = "true".equals(System.getProperty(AS_HEX_KEY));
@@ -34,6 +40,9 @@ public class OTPEncoder implements Encoder {
 
 	@Override
 	public String convert(String text) throws IOException {
+		
+		// Convert text to bits
+		
 		byte[] textBytes;
 		if(asHex && decode) {
 			try {
@@ -45,12 +54,21 @@ public class OTPEncoder implements Encoder {
 			textBytes = text.getBytes(StandardCharsets.UTF_8);
 		}
 		
-		byte[] encodedBytes = new byte[textBytes.length];
 		BitSet textBits = BitSet.valueOf(textBytes);
+		
+		// Get OTP
+		
 		BitSet otpBits = getOTP(textBytes.length);
 		
+		if(otpBits.length() < textBits.length() && !decode) {
+			System.err.println("WARNING: OTP is shorter than input text. It will have to be applied several times!");
+		}
+		
+		// Apply OTP, reapplying if it isn't long enough
+		
+		byte[] encodedBytes = new byte[textBytes.length];
 		int offset = 0;
-		for(int i=0; i<textBits.size(); i+=otpBits.size()) {
+		for(int i=0; i<textBits.size(); i+=otpBits.size()) {			
 			int chunkEnd = i + otpBits.size();
 			if(chunkEnd>textBits.size()) {
 				chunkEnd = textBits.size();
@@ -59,12 +77,23 @@ public class OTPEncoder implements Encoder {
 			converted.xor(otpBits);
 			offset = add(converted.toByteArray(), encodedBytes, offset);
 		}
+		
+		// Build encoded String
+		
 		if(asHex && !decode) {
 			return Hex.encodeHexString(encodedBytes);
 		}
 		return new String(encodedBytes, StandardCharsets.UTF_8);
 	}
 	
+	/** Add everything in source to target from offset.
+	 * Additions will stop at either the end of source or the end of target, whichever comes first
+	 * @param source
+	 * @param target
+	 * @param offset
+	 * @return index of the position after the last insertion
+	 * 	ie if source has 3 elements and was inserted with an offset of 2, return value will be 5
+	 */
 	private static int add(byte[] source, byte[] target, int offset) {
 		for(int i=0; offset<(target.length) && i<source.length; i++) {
 			target[offset++] = source[i];
@@ -72,19 +101,29 @@ public class OTPEncoder implements Encoder {
 		return offset;		
 	}
 	
+	/** Obtain a one time pad
+	 * @param textLength
+	 * @return
+	 * @throws IOException
+	 */
 	private BitSet getOTP(int textLength) throws IOException {
-		if(generate) {
+		if(generateOTP) {
 			return generateOTP(textLength);
 		}
 		
 		// Read if not generating
 		
 		try(var is = Files.newInputStream(otpPath, StandardOpenOption.READ)){
-			// Get a maximum of text length bytes from file as we don't need more
+			// Only get the amount of the otp we need for encoding.
 			return BitSet.valueOf(is.readNBytes(textLength));	
 		}
 	}
 	
+	/** Generate a random one time pad and write it to the file given by otpPath
+	 * @param textLength
+	 * @return the otp
+	 * @throws IOException
+	 */
 	private BitSet generateOTP(int textLength) throws IOException {
 		byte[] otp = new byte[textLength];
 		List<Byte> otpList = Utils.getRandom().ints(textLength, BYTE_MIN, BYTE_MAX).boxed().map(r -> r.byteValue()).toList();

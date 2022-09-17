@@ -13,7 +13,7 @@ output 	: 	output.txt
 #	- RSA : encodes as RSA with randomly generated key pair
 #	- TRANSLATE
 
-encoder	:	HEX
+encoder	:	OTP
 
 ### SHIFT options ### 
 # shift will loop at char limits if specified (eg z -> a if min_char=a and max_char=z)
@@ -38,7 +38,9 @@ rand_value_range : 32-126
 
 
 ### OTP options ###
-otp_file_path : otp/otp.txt
+otp_file_path : otp/rand-otp.txt
 # Weird things happen when trying to copy-paste OTP-encoded text
 # Converting the encoded string to hex avoids this issue
 encoded_as_hex : true
+# Generate key if the file doesn't exist
+generate_if_no_key: true

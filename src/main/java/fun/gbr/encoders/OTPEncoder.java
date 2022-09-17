@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.BitSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
@@ -20,15 +19,17 @@ public class OTPEncoder implements Encoder {
 	
 	private Path otpPath;
 	private boolean asHex;
-	private boolean decode = Mode.decode.equals(Options.get().getMode());
+	private boolean decode;
+	private boolean generate;
 	
 	public OTPEncoder(){
-		this.otpPath = Utils.getDictionaryPath(OTP_FILE_PATH_KEY);
-		if(!Files.isReadable(otpPath)) {
-			// TODO generate otp if no file
-			throw new IllegalArgumentException("Can't read otp file");
+		otpPath = Utils.getDictionaryPath(OTP_FILE_PATH_KEY);
+		decode = Mode.decode.equals(Options.get().getMode());
+		generate = "true".equals(System.getProperty(GENERATE_KEY)) && !decode && !Files.exists(otpPath);
+		if((!generate) && !Files.isReadable(otpPath)) {
+			throw new IllegalArgumentException("OTP not readable: " + otpPath.toAbsolutePath());
 		}
-		this.asHex = "true".equals(System.getProperty(AS_HEX_KEY));
+		asHex = "true".equals(System.getProperty(AS_HEX_KEY));
 	}
 
 	@Override
@@ -72,9 +73,7 @@ public class OTPEncoder implements Encoder {
 	}
 	
 	private BitSet getOTP(int textLength) throws IOException {
-		if("true".equals(System.getProperty(GENERATE_KEY))
-				&& Mode.encode.equals(Options.get().getMode()) 
-				&& !Files.exists(otpPath)) {
+		if(generate) {
 			return generateOTP(textLength);
 		}
 		
@@ -92,7 +91,7 @@ public class OTPEncoder implements Encoder {
 		for(int i=0; i<textLength; i++) {
 			otp[i] = otpList.get(i);
 		}
-		Files.writeString(otpPath, new String(otp, StandardCharsets.UTF_8));
+		Files.write(otpPath, otp);
 		return BitSet.valueOf(otp);		
 	}
 	

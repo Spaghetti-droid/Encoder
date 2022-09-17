@@ -1,8 +1,15 @@
 package fun.gbr;
 
 import java.nio.file.Path;
+import java.util.Random;
 
 public class Utils {
+	
+	private static Random rand = new Random();
+	public static Random getRandom() {
+		return rand;
+	}
+	
 	/**
 	 * @return The path for the dictionary set by the user
 	 */

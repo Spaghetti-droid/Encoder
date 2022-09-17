@@ -6,12 +6,12 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import fun.gbr.Utils;
 import fun.gbr.tools.SubstitutionDictionaryMaker;
 
 /**
@@ -20,7 +20,6 @@ import fun.gbr.tools.SubstitutionDictionaryMaker;
  */
 public class DictionaryCreator implements DictionaryLoader {
 	
-	private static Random rand = new Random();
 	private Map<String, String> dictionary;
 	private Path path;
 	private Pair keyPair;
@@ -70,7 +69,7 @@ public class DictionaryCreator implements DictionaryLoader {
 								.boxed()
 								.collect(Collectors.toList());
 		for(int i=keyPair.min(); i<keyPair.max()+1; i++) {
-			int nextVal = values.remove(rand.nextInt(0, values.size()));
+			int nextVal = values.remove(Utils.getRandom().nextInt(0, values.size()));
 			this.dictionary.put(String.valueOf((char) i), String.valueOf((char) nextVal));
 		}
 		

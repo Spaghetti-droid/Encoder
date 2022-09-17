@@ -6,6 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.BitSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
@@ -44,11 +46,7 @@ public class OTPEncoder implements Encoder {
 		
 		byte[] encodedBytes = new byte[textBytes.length];
 		BitSet textBits = BitSet.valueOf(textBytes);
-		BitSet otpBits;
-		try(var is = Files.newInputStream(otpPath, StandardOpenOption.READ)){
-			// Get a maximum of text length bytes from file as we don't need more
-			otpBits = BitSet.valueOf(is.readNBytes(textBytes.length));	
-		}
+		BitSet otpBits = getOTP(textBytes.length);
 		
 		int offset = 0;
 		for(int i=0; i<textBits.size(); i+=otpBits.size()) {
@@ -73,7 +71,36 @@ public class OTPEncoder implements Encoder {
 		return offset;		
 	}
 	
+	private BitSet getOTP(int textLength) throws IOException {
+		if("true".equals(System.getProperty(GENERATE_KEY))
+				&& Mode.encode.equals(Options.get().getMode()) 
+				&& !Files.exists(otpPath)) {
+			return generateOTP(textLength);
+		}
+		
+		// Read if not generating
+		
+		try(var is = Files.newInputStream(otpPath, StandardOpenOption.READ)){
+			// Get a maximum of text length bytes from file as we don't need more
+			return BitSet.valueOf(is.readNBytes(textLength));	
+		}
+	}
+	
+	private BitSet generateOTP(int textLength) throws IOException {
+		byte[] otp = new byte[textLength];
+		List<Byte> otpList = Utils.getRandom().ints(textLength, BYTE_MIN, BYTE_MAX).boxed().map(r -> r.byteValue()).toList();
+		for(int i=0; i<textLength; i++) {
+			otp[i] = otpList.get(i);
+		}
+		Files.writeString(otpPath, new String(otp, StandardCharsets.UTF_8));
+		return BitSet.valueOf(otp);		
+	}
+	
 	private static final String OTP_FILE_PATH_KEY = "otp_file_path";
 	private static final String AS_HEX_KEY = "encoded_as_hex";
+	private static final String GENERATE_KEY = "generate_if_no_key";
+	
+	private static final int BYTE_MIN = Byte.MIN_VALUE;
+	private static final int BYTE_MAX = Byte.MAX_VALUE;
 
 }

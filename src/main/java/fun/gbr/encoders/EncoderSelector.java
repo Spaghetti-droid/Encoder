@@ -13,6 +13,8 @@ import fun.gbr.options.Options;
  */
 public class EncoderSelector {
 	
+	private EncoderSelector() {}
+	
 	public static Encoder build() {
 		return build(Options.get().getEncoderKey());
 	}
@@ -37,6 +39,7 @@ public class EncoderSelector {
 		REGISTRY.put("SUB", SubstitutionEncoder.class);
 		REGISTRY.put("OTP", OTPEncoder.class);
 		REGISTRY.put("HEX", HexEncoder.class);
+		REGISTRY.put("BIN", BinaryEncoder.class);
 	}
 	
 }

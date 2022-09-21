@@ -25,8 +25,8 @@ public class FileFetcher implements Fetcher {
 		}
 
 		String text;
-		try {
-			text = Files.lines(path).collect(Collectors.joining("\n"));
+		try(var stream = Files.lines(path)) {
+			text = stream.collect(Collectors.joining("\n"));
 		} catch (IOException e) {
 			System.err.println("Issue reading \"" + path + "\": " + e.getMessage());
 			e.printStackTrace();

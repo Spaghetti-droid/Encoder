@@ -41,8 +41,8 @@ public class DictionaryCreator implements DictionaryLoader {
 		if(range != null) {
 			Matcher matcher = RANGE_PATTERN.matcher(range);
 			if(matcher.matches()) {
-				int min = Integer.valueOf(matcher.group(1));
-				int max = Integer.valueOf(matcher.group(2));
+				int min = Integer.parseInt(matcher.group(1));
+				int max = Integer.parseInt(matcher.group(2));
 				if(min>max) {
 					int temp = min;
 					min = max;

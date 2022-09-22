@@ -15,7 +15,6 @@ import fun.gbr.options.Options.Mode;
  * - Hierarchical option file handling. 1 main and 1 per encoder
  * - logs
  * - more encoders
- * - Options that also stores Encoder-specific options?
  *
  */
 public class Launcher {

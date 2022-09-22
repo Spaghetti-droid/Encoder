@@ -23,11 +23,13 @@ public class FileReturner implements Returner {
 
 	@Override
 	public void writeOut(String encoded) {
+		// No point throwing exception as normal exception handling depends on writeOut
 		if(!Files.exists(output) || Files.isWritable(output)) {
 			try {
 				Files.writeString(output, encoded, StandardOpenOption.APPEND, StandardOpenOption.CREATE);
 			} catch (IOException e) {
-				throw new RuntimeException(e);
+				System.err.println("Can't write to " + output +"! " + e.getMessage());
+				e.printStackTrace();
 			}
 		} else {
 			System.err.println("Can't write result to " + output + "! Not writeable!");

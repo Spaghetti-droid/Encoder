@@ -18,21 +18,17 @@ public class FileFetcher implements Fetcher {
 	}
 
 	@Override
-	public String getInput() {
+	public String getInput() throws IOException {
 
 		if (!Files.isReadable(path)) {
-			return null;
+			if(!Files.exists(path)) {
+				throw new IOException("Input file not found!");
+			}
+			throw new IOException("Input file isn't readable!");
 		}
 
-		String text;
 		try(var stream = Files.lines(path)) {
-			text = stream.collect(Collectors.joining("\n"));
-		} catch (IOException e) {
-			System.err.println("Issue reading \"" + path + "\": " + e.getMessage());
-			e.printStackTrace();
-			return null;
-		}
-
-		return text;
+			return stream.collect(Collectors.joining("\n"));
+		} 
 	}
 }

@@ -28,7 +28,7 @@ public class BinaryEncoder implements Encoder {
 		
 		Matcher matcher = BINARY_PATTERN.matcher(text);
 		if(!matcher.matches()) {
-			throw new IllegalArgumentException("Input text is not binary: " + text);
+			throw new IllegalArgumentException("Input text is not binary!");
 		}
 		
 		// Remove leading and trailing white space

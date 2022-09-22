@@ -13,14 +13,15 @@ import java.util.regex.Pattern;
  */
 public class OptionParser {	
 	
+	private OptionParser() {}
+	
 	/** Parse file options into an options object and the system properties
 	 * @param optionFilePath
 	 * @return
 	 * @throws IOException
 	 */
 	public static Options parse(Path optionFilePath) throws IOException {
-		List<String> lines = Files.lines(optionFilePath)
-				.toList();
+		List<String> lines = Files.readAllLines(optionFilePath);
 		
 		Options opt = new Options();
 		for(String line : lines) {

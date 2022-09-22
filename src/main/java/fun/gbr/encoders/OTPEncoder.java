@@ -33,23 +33,19 @@ public class OTPEncoder implements Encoder {
 				&& !decode 
 				&& !Files.exists(otpPath);
 		if(!generateOTP && !Files.isReadable(otpPath)) {
-			throw new IllegalArgumentException("OTP not readable: " + otpPath.toAbsolutePath());
+			throw new IllegalArgumentException("One Time Pad not readable: " + otpPath.toAbsolutePath());
 		}
 		asHex = "true".equals(System.getProperty(AS_HEX_KEY));
 	}
 
 	@Override
-	public String convert(String text) throws IOException {
+	public String convert(String text) throws DecoderException, IOException {
 		
 		// Convert text to bits
 		
 		byte[] textBytes;
 		if(asHex && decode) {
-			try {
-				textBytes = Hex.decodeHex(text);
-			} catch (DecoderException e) {
-				throw new RuntimeException(e);
-			}
+			textBytes = Hex.decodeHex(text);
 		} else {
 			textBytes = text.getBytes(StandardCharsets.UTF_8);
 		}
@@ -125,11 +121,17 @@ public class OTPEncoder implements Encoder {
 	 * @throws IOException
 	 */
 	private BitSet generateOTP(int textLength) throws IOException {
+		
+		// Create random OTP
+		
 		byte[] otp = new byte[textLength];
-		List<Byte> otpList = Utils.getRandom().ints(textLength, BYTE_MIN, BYTE_MAX).boxed().map(r -> r.byteValue()).toList();
+		List<Byte> otpList = Utils.getRandom().ints(textLength, Byte.MIN_VALUE, Byte.MAX_VALUE).boxed().map(Integer::byteValue).toList();
 		for(int i=0; i<textLength; i++) {
 			otp[i] = otpList.get(i);
 		}
+		
+		// Write OTP file
+		
 		Files.write(otpPath, otp);
 		return BitSet.valueOf(otp);		
 	}
@@ -137,8 +139,4 @@ public class OTPEncoder implements Encoder {
 	private static final String OTP_FILE_PATH_KEY = "otp_file_path";
 	private static final String AS_HEX_KEY = "encoded_as_hex";
 	private static final String GENERATE_KEY = "generate_if_no_key";
-	
-	private static final int BYTE_MIN = Byte.MIN_VALUE;
-	private static final int BYTE_MAX = Byte.MAX_VALUE;
-
 }

@@ -11,18 +11,18 @@ public class Options {
 	
 	// Singleton management
 	
-	private static Options SINGLETON; 
+	private static Options singleton; 
 	
 	public static Options get() {
-		if(SINGLETON == null) {
+		if(singleton == null) {
 			try {
-				SINGLETON = OptionParser.parse(OPTION_FILE_PATH);
-				System.out.println("Loaded " + SINGLETON);
+				singleton = OptionParser.parse(OPTION_FILE_PATH);
+				System.out.println("Loaded " + singleton);
 			} catch (IOException e) {
-				throw new RuntimeException("Failed to load options on path: " + OPTION_FILE_PATH.toAbsolutePath(), e);
+				throw new OptionLoadingException("Failed to load options on path: " + OPTION_FILE_PATH.toAbsolutePath(), e);
 			}
 		}
-		return SINGLETON;
+		return singleton;
 	}
 	
 	// Options object
@@ -71,8 +71,34 @@ public class Options {
 	private static final Path DEFAULT_OUTPUT = Path.of("output.txt");
 	private static final Path OPTION_FILE_PATH = Path.of("options.txt");
 
-	public static enum Mode{
+	public enum Mode{
 		encode,
 		decode
+	}
+	
+	public static class OptionLoadingException extends RuntimeException{
+
+		public OptionLoadingException(String message, Throwable cause, boolean enableSuppression,
+				boolean writableStackTrace) {
+			super(message, cause, enableSuppression, writableStackTrace);
+		}
+
+		public OptionLoadingException(String message, Throwable cause) {
+			super(message, cause);
+		}
+
+		public OptionLoadingException(String message) {
+			super(message);
+		}
+
+		public OptionLoadingException(Throwable cause) {
+			super(cause);
+		}
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 4246160215969899495L;
+		
 	}
 }

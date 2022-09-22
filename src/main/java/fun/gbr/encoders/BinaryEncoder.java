@@ -1,6 +1,5 @@
 package fun.gbr.encoders;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,7 +14,7 @@ import fun.gbr.options.Options.Mode;
 public class BinaryEncoder implements Encoder {
 
 	@Override
-	public String convert(String text) throws IOException {
+	public String convert(String text){
 		if(Mode.decode.equals(Options.get().getMode())) {
 			return decode(text);
 		}

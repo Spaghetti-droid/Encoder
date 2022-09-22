@@ -15,22 +15,18 @@ public class EncoderSelector {
 	
 	private EncoderSelector() {}
 	
-	public static Encoder build() {
+	public static Encoder build() throws InstantiationException, IllegalAccessException, 
+	IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		return build(Options.get().getEncoderKey());
 	}
 
-	public static Encoder build(String encoderKey) {
+	public static Encoder build(String encoderKey) throws InstantiationException, IllegalAccessException, 
+	IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		var encoder = REGISTRY.get(encoderKey);
 		if(encoder == null) {
 			throw new IllegalArgumentException("Encoder not recognised!");
 		}
-		
-		try {
-			return encoder.getDeclaredConstructor().newInstance();
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException(e);
-		}
+		return encoder.getDeclaredConstructor().newInstance();
 	}
 	
 	private static final Map<String, Class<? extends Encoder>> REGISTRY = new HashMap<>();

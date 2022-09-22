@@ -51,7 +51,7 @@ public class ShiftEncoder implements Encoder {
 				}
 			}
 			return c;
-		}).forEach(c -> builder.appendCodePoint(c));
+		}).forEach(builder::appendCodePoint);
 		return builder.toString();
 	}
 

@@ -13,7 +13,8 @@ public interface QuitTrigger {
 	
 	public static class EmptyQuitter implements QuitTrigger{
 		@Override
-		public void checkIfQuit(String response) throws UserQuit {			
+		public void checkIfQuit(String response) throws UserQuit {	
+			// Empty Quitter deactivates quitting
 		}		
 	}
 }

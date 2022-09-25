@@ -14,6 +14,7 @@ import fun.gbr.options.Options.Mode;
  * - Flexible option file handling allowing several option files if desired
  * - Store encoder options in dedicated map, not system properties (Forces option singleton loading)?
  * - logs
+ * - Issue: SubstitutionEncoder is not reliable when converting from patterns containing more than one character
  *
  */
 public class Launcher {

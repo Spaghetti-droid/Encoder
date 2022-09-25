@@ -36,6 +36,7 @@ public class EncoderSelector {
 		REGISTRY.put("OTP", OTPEncoder.class);
 		REGISTRY.put("HEX", HexEncoder.class);
 		REGISTRY.put("BIN", BinaryEncoder.class);
+		REGISTRY.put("RSA", RSAEncoder.class);
 	}
 	
 }

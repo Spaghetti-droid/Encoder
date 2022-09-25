@@ -10,9 +10,13 @@ import fun.gbr.options.Options.Mode;
  * A modular encoder with no ui
  * 
  * TODO
- * - Hierarchical option file handling. 1 main and 1 per encoder
+ * - RSA Key generator only needs some options. Implement partial/progressive loading.
+ * - Flexible option file handling allowing several option files if desired
+ * - Store encoder options in dedicated map, not system properties (Forces option singleton loading)?
  * - logs
  * - more encoders
+ * - encoder chaining
+ * 
  *
  */
 public class Launcher {

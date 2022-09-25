@@ -7,14 +7,15 @@ output 	: 	output.txt
 # Encoder name. Currently available are
 #	- SHIFT: shifts all chars by a given number
 #	- SUB: substitutes patterns based on a dictionary
-#	- OTP: Uses a one time pad to encode the string
-#	- HEX: Encode string as hexadecimal number collection 
-#	- BIN: Encode as binary
+#	- OTP: One time pad encryption
+#	- HEX: Hexadecimal number series 
+#	- BIN: Binary
+#	- RSA: RSA encrypted string encoded in Base 64
+#	- B64: Base 64 String
 # Planned	
-#	- RSA : encodes as RSA with randomly generated key pair
 #	- TRANSLATE
 
-encoder	:	BIN
+encoder	:	RSA
 
 ### SHIFT options ### 
 # shift will loop at char limits if specified (eg z -> a if min_char=a and max_char=z)
@@ -45,3 +46,8 @@ otp_file_path : otp/otp.txt
 encoded_as_hex : true
 # Generate key if the file doesn't exist
 generate_if_no_key: true
+
+
+### RSA options ###
+public_key_path : RSA/public.key
+private_key_path : RSA/private.key

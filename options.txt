@@ -10,12 +10,12 @@ output 	: 	output.txt
 #	- OTP: One time pad encryption
 #	- HEX: Hexadecimal number series 
 #	- BIN: Binary
-#	- RSA: RSA encrypted string encoded in Base 64
+#	- RSA: RSA encrypted string encoded in Base 64. Note: This encoder does not generate its keys. Use the RSAKeyGenerator tool to do so.
 #	- B64: Base 64 String
 # Planned	
 #	- TRANSLATE
 
-encoder	:	RSA
+encoder	:	B64
 
 ### SHIFT options ### 
 # shift will loop at char limits if specified (eg z -> a if min_char=a and max_char=z)

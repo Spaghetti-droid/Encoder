@@ -54,9 +54,14 @@ public class ShiftEncoder implements Encoder {
 		}).forEach(builder::appendCodePoint);
 		return builder.toString();
 	}
+	
+
+	@Override
+	public String getName() {
+		return "SHIFT";
+	}
 
 	public static final String SHIFT_KEY = "shift";
 	public static final String MIN_CHAR_KEY = "min_char";
 	public static final String MAX_CHAR_KEY = "max_char";
-
 }

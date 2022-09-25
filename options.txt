@@ -7,15 +7,16 @@ output 	: 	output.txt
 # Encoder name. Currently available are
 #	- SHIFT: shifts all chars by a given number
 #	- SUB: substitutes patterns based on a dictionary
-#	- OTP: One time pad encryption
+#	- OTP: One time pad encryption. Chaining with B64 is recommended.
 #	- HEX: Hexadecimal number series 
 #	- BIN: Binary
-#	- RSA: RSA encrypted string encoded in Base 64. Note: This encoder does not generate its keys. Use the RSAKeyGenerator tool to do so.
+#	- RSA: Encrypt with RSA. It is recommended to chain this encoder with B64. This encoder does not generate its keys. Use the RSAKeyGenerator tool to do so.
 #	- B64: Base 64 String
 # Planned	
 #	- TRANSLATE
-
-encoder	:	B64
+# You can chain several encoders by separating them with '+'. 
+# For example use "RSA+B64" to encrypt using RSA, then encode the encrypted text in Base 64.
+encoder	:	BIN+B64
 
 ### SHIFT options ### 
 # shift will loop at char limits if specified (eg z -> a if min_char=a and max_char=z)

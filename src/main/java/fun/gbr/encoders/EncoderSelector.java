@@ -1,7 +1,9 @@
 package fun.gbr.encoders;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import fun.gbr.options.Options;
@@ -22,13 +24,54 @@ public class EncoderSelector {
 
 	public static Encoder build(String encoderKey) throws InstantiationException, IllegalAccessException, 
 	IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		var encoder = REGISTRY.get(encoderKey);
+		String[] keys = encoderKey.split(SEPARATION_REGEX);
+		return makeEncoder(keys);
+	}
+	
+	/** Makes an encoder based on the provided array of encoder keys
+	 * @param keys
+	 * @return A simple or composite encoder depending on the number of keys passed
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 */
+	private static Encoder makeEncoder(String[] keys) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		if(keys.length == 1) {
+			return makeSimpleEncoder(keys[0]);
+		}
+		
+		// Many keys -> composite encoder
+		
+		List<Encoder> components = new ArrayList<>(keys.length);
+		for(String key: keys) {
+			components.add(makeSimpleEncoder(key));
+		}
+		
+		return new CompositeEncoder(components);
+	}
+	
+	/** Initialises a simple encoder based on the provided key
+	 * @param key
+	 * @return
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 */
+	private static Encoder makeSimpleEncoder(String key) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		var encoder = REGISTRY.get(key);
 		if(encoder == null) {
 			throw new IllegalArgumentException("Encoder not recognised!");
 		}
 		return encoder.getDeclaredConstructor().newInstance();
 	}
 	
+	private static final String SEPARATION_REGEX = "\\s*\\+\\s*";
 	private static final Map<String, Class<? extends Encoder>> REGISTRY = new HashMap<>();
 	static {
 		REGISTRY.put("SHIFT", ShiftEncoder.class);

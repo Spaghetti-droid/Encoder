@@ -51,6 +51,11 @@ public class SubstitutionEncoder implements Encoder {
 		
 		return subH.getEncoded(defaultSub);
 	}
+	
+	@Override
+	public String getName() {
+		return "SUB";
+	}
 
 	private static final String DEFAULT_KEY = "default_if_unknown";
 	private static final Pattern DEF_KEY_PATTERN = Pattern.compile("\"(.+)\"");

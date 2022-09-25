@@ -22,4 +22,8 @@ public class Base64Encoder implements Encoder {
 		return Base64.getEncoder().encodeToString(text.getBytes(StandardCharsets.UTF_8));
 	}
 
+	@Override
+	public String getName() {
+		return "B64";
+	}
 }

@@ -19,4 +19,9 @@ public class HexEncoder implements Encoder {
 		return Hex.encodeHexString(text.getBytes(StandardCharsets.UTF_8));
 	}
 
+	@Override
+	public String getName() {
+		return "HEX";
+	}
+
 }

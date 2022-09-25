@@ -136,6 +136,11 @@ public class OTPEncoder implements Encoder {
 		return BitSet.valueOf(otp);		
 	}
 	
+	@Override
+	public String getName() {
+		return "OTP";
+	}
+	
 	private static final String OTP_FILE_PATH_KEY = "otp_file_path";
 	private static final String AS_HEX_KEY = "encoded_as_hex";
 	private static final String GENERATE_KEY = "generate_if_no_key";

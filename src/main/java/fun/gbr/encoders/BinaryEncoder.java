@@ -93,6 +93,10 @@ public class BinaryEncoder implements Encoder {
 		return bytes;
 	}
 	
-	private static final Pattern BINARY_PATTERN = Pattern.compile("\\s*([01]+)\\s*"); 
+	@Override
+	public String getName() {
+		return "BIN";
+	} 
 	
+	private static final Pattern BINARY_PATTERN = Pattern.compile("\\s*([01]+)\\s*");	
 }

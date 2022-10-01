@@ -1,5 +1,7 @@
 package fun.gbr.encoders;
 
+import java.util.logging.Logger;
+
 import fun.gbr.options.Options;
 import fun.gbr.options.Options.Mode;
 
@@ -31,7 +33,7 @@ public class ShiftEncoder implements Encoder {
 		}
 		
 		if(minChar>maxChar) {
-			System.out.println("Min char below max char. Swapping them!");
+			Logger.getLogger(this.getClass().getCanonicalName()).fine("Max char below min char. Swapping them!");
 			char temp = minChar;
 			minChar = maxChar;
 			maxChar = temp;

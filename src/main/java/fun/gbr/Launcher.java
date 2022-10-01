@@ -1,5 +1,8 @@
 package fun.gbr;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import fun.gbr.encoders.EncoderSelector;
 import fun.gbr.io.FetcherFactory;
 import fun.gbr.io.ReturnerFactory;
@@ -10,38 +13,48 @@ import fun.gbr.options.Options.Mode;
  * A modular encoder with no ui
  * 
  * TODO
+ * - Add encoder specific prefixes to their respective options
  * - RSA Key generator only needs some options. Implement partial/progressive loading.
  * - Flexible option file handling allowing several option files if desired
  * - Store encoder options in dedicated map, not system properties (Forces option singleton loading)?
  * - logs
  * - Issue: SubstitutionEncoder is not reliable when converting from patterns containing more than one character
+ * - Sub dic maker: Give option to append
+ * - Sub dic maker: Warn if resetting previous value and display old value
+ * - Sub dic maker: Make path existing a validation failure rather than an exception
  *
  */
-public class Launcher {
+public class Launcher {	
 
-	public static void main(String[] args) {
-		
+	private static final Logger LOGGER = Logger.getLogger(Launcher.class.getCanonicalName());
+
+	public static void main(String[] args) {			
+		if(!Utils.initProgram()) {
+			return;
+		}
 		try {
+			
 			// Read input
 
 			String text = FetcherFactory.build().getInput();
-			System.out.println("Input: " + text);
+			LOGGER.info(() -> "Input: " + text);
 
 			// Call encoder
 
 			String encoded = EncoderSelector.build().convert(text);
-			System.out.println((Mode.encode.equals(Options.get().getMode()) ? "Encoded as " : "Decoded to ") + encoded);
+			LOGGER.info(() -> (Mode.encode.equals(Options.get().getMode()) ? "Encoded as " : "Decoded to ") + encoded);
 
 			// Output encoded
 
-			System.out.println("Writing to " + Options.get().getOutput().toAbsolutePath());
+			LOGGER.info(() -> "Writing to " + Options.get().getOutput().toAbsolutePath());
 			ReturnerFactory.build().writeOut(makeOperationLabel()  + " : " + encoded + '\n');
 
-			System.out.println("Done");
+			LOGGER.info("Done");
 			
 		} catch(Exception e) {
-			ReturnerFactory.build().writeOut("Error! (" + makeOperationLabel() + "): " + e.getMessage() + '\n');
-			e.printStackTrace();
+			String errorLabel = "Error! (" + makeOperationLabel() + ")";
+			ReturnerFactory.build().writeOut(errorLabel + ": " + e.getMessage() + '\n');
+			LOGGER.log(Level.SEVERE, errorLabel, e);
 		}
 	}
 	
@@ -52,5 +65,4 @@ public class Launcher {
 	private static String makeOperationLabel() {
 		return Options.get().getMode() + " - " + Options.get().getEncoderKey();
 	}
-
 }

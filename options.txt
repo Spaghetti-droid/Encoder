@@ -10,13 +10,20 @@ output 	: 	output.txt
 #	- OTP: One time pad encryption. Chaining with B64 is recommended.
 #	- HEX: Hexadecimal number series 
 #	- BIN: Binary
-#	- RSA: Encrypt with RSA. It is recommended to chain this encoder with B64. This encoder does not generate its keys. Use the RSAKeyGenerator tool to do so.
+#	- RSA: Encrypt with RSA. Chaining with B64 is recommended. Use the RSAKeyGenerator tool to generate RSA keys.
 #	- B64: Base 64 String
 # Planned	
 #	- TRANSLATE
 # You can chain several encoders by separating them with '+'. 
 # For example use "RSA+B64" to encrypt using RSA, then encode the encrypted text in Base 64.
 encoder	:	BIN+B64
+
+# Logging properties
+# Levels are ALL, FINEST, FINER, FINE, INFO, WARNING, SEVERE, OFF
+log_file	:	logs/encoder.log
+log_level	:	INFO
+
+########## Individual encoder options ##########
 
 ### SHIFT options ### 
 # shift will loop at char limits if specified (eg z -> a if min_char=a and max_char=z)
@@ -42,9 +49,6 @@ rand_value_range : 32-126
 
 ### OTP options ###
 otp_file_path : otp/otp.txt
-# Weird things happen when trying to copy-paste OTP-encoded text
-# Converting the encoded string to hex avoids this issue
-encoded_as_hex : true
 # Generate key if the file doesn't exist
 generate_if_no_key: true
 
@@ -52,3 +56,9 @@ generate_if_no_key: true
 ### RSA options ###
 public_key_path : RSA/public.key
 private_key_path : RSA/private.key
+
+### RSA KeyGen options ###
+rsa_kg_public_key_path : 	RSA/public2.key
+rsa_kg_private_key_path : 	RSA/private2.key
+rsa_kg_log_file		:	logs/RSAKeyGen.log
+rsa_kg_log_level	:	INFO

@@ -13,10 +13,6 @@ import fun.gbr.tools.ui.UserQuit;
 
 /**
  * A utility class for creating a dictionary in the correct format
- * 
- * TODO
- * - Give option to append
- * - Warn if resetting previous value and display old value
  *
  */
 public class SubstitutionDictionaryMaker {
@@ -58,7 +54,6 @@ public class SubstitutionDictionaryMaker {
 		}
 		
 		System.out.println("Done");
-
 	}
 	
 	/** Write dictionary to file at path

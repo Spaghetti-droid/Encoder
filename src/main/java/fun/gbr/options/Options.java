@@ -2,6 +2,7 @@ package fun.gbr.options;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.logging.Logger;
 
 /**
  * Represents the main options that will always be needed
@@ -13,14 +14,25 @@ public class Options {
 	
 	private static Options singleton; 
 	
+	/**
+	 * Load and parse options
+	 */
+	public static void init() {
+		try {
+			singleton = OptionParser.parse(OPTION_FILE_PATH);
+			Logger.getLogger(Options.class.getCanonicalName()).info(() -> "Loaded " + singleton);
+		} catch (IOException e) {
+			throw new OptionLoadingException("Failed to load options on path: " + OPTION_FILE_PATH.toAbsolutePath(), e);
+		}
+	}
+	
+	/**
+	 * @return Options object
+	 * @throws IllegalStateException if Options hasn't been initialised
+	 */
 	public static Options get() {
 		if(singleton == null) {
-			try {
-				singleton = OptionParser.parse(OPTION_FILE_PATH);
-				System.out.println("Loaded " + singleton);
-			} catch (IOException e) {
-				throw new OptionLoadingException("Failed to load options on path: " + OPTION_FILE_PATH.toAbsolutePath(), e);
-			}
+			throw new IllegalStateException("Options not initialised!");
 		}
 		return singleton;
 	}

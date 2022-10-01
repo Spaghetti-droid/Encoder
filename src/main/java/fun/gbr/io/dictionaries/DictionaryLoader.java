@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import fun.gbr.Utils;
@@ -12,7 +13,7 @@ import fun.gbr.options.Options.Mode;
 
 /**
  * Classes implementing this interface must be able to return a dictionary.
- * The interface itself is in charge of choosing which class to use (TODO separate out into LoaderBuilder?)
+ * The interface itself is in charge of choosing which class to use.
  *
  */
 public interface DictionaryLoader {
@@ -28,10 +29,10 @@ public interface DictionaryLoader {
 		boolean generateRandom = Mode.decode.equals(Options.get().getMode()) 
 				|| (!dictionaryExists && DO_RANDOMISE_VALUE.equals(System.getProperty(RANDOMISE_KEY)));
 		if(!generateRandom) {
-			System.out.println("Reading dictionary from \"" + path.toAbsolutePath() + "\"");
+			Logger.getLogger(DictionaryLoader.class.getCanonicalName()).config(() -> "Reading dictionary from \"" + path.toAbsolutePath() + "\"");
 			return new DictionaryReader(path);
 		}
-		System.out.println("Writing new dictionary to \"" + path.toAbsolutePath() + "\"");
+		Logger.getLogger(DictionaryLoader.class.getCanonicalName()).config(() -> "Writing new dictionary to \"" + path.toAbsolutePath() + "\"");
 		return new DictionaryCreator(path);
 	}
 	

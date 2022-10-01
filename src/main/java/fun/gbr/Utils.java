@@ -2,8 +2,15 @@ package fun.gbr;
 
 import java.nio.file.Path;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import fun.gbr.options.LoggerHandler;
+import fun.gbr.options.Options;
 
 public class Utils {
+	
+	private Utils() {}
 	
 	private static Random rand = new Random();
 	public static Random getRandom() {
@@ -19,8 +26,7 @@ public class Utils {
 			throw new IllegalArgumentException(key + " not specified");
 		}
 
-		Path dictionaryPath = Path.of(path);
-		return dictionaryPath;
+		return Path.of(path);
 	}
 	
 	/** Converts system property to path if not null
@@ -33,5 +39,28 @@ public class Utils {
 			throw new IllegalArgumentException(propertyName + " must be specified.");
 		}
 		return Path.of(pathString);
+	}
+	
+	/** Initialise prerequisites for execution
+	 * @return true if initialisation was successful, false otherwise
+	 */
+	public static boolean initProgram() {
+		return initProgram(null);
+	}
+	
+	/** Initialise prerequisites for execution
+	 * @param logger if null, root logger is used
+	 * @return true if initialisation was successful, false otherwise
+	 */
+	public static boolean initProgram(Logger logger) {
+		try {
+			LoggerHandler.initLogger(logger);
+			Options.init();
+		} catch(Exception e) {
+			// Log exception if possible
+			Logger.getLogger(Utils.class.getCanonicalName()).log(Level.SEVERE, e, () -> "Error during initialisation!");
+			return false;
+		}		
+		return true;
 	}
 }

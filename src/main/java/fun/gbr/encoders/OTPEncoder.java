@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.BitSet;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
@@ -57,7 +58,7 @@ public class OTPEncoder implements Encoder {
 		BitSet otpBits = getOTP(textBytes.length);
 		
 		if(otpBits.length() < textBits.length() && !decode) {
-			System.err.println("WARNING: OTP is shorter than input text. It will have to be applied several times!");
+			Logger.getLogger(this.getClass().getCanonicalName()).warning("OTP is shorter than input text. It will have to be applied several times!");
 		}
 		
 		// Apply OTP, reapplying if it isn't long enough

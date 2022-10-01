@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
 import fun.gbr.options.Options;
@@ -48,7 +49,7 @@ public class DictionaryReader implements DictionaryLoader {
 			if(matcher.matches()) {
 				this.dictionary.put(matcher.group(keyGroup), matcher.group(valueGroup));
 			} else {
-				System.err.println("Unparsed line in dictionary: " + line);
+				Logger.getLogger(this.getClass().getCanonicalName()).warning(() -> "Unparsed line in dictionary: " + line);
 			}
 		}
 	}

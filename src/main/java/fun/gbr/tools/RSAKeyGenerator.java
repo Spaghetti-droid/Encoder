@@ -6,10 +6,12 @@ import java.nio.file.Path;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import fun.gbr.Utils;
 import fun.gbr.encoders.RSAEncoder;
-import fun.gbr.options.Options;
+import fun.gbr.options.LoggerHandler;
 
 /**
  * Tool that generates RSA keys based on options
@@ -21,23 +23,25 @@ public class RSAKeyGenerator {
 	private Path privateKeyPath;
 
 	public RSAKeyGenerator() {
-		publicKeyPath = Utils.toNonNullPath(RSAEncoder.PUBLIC_KEY_OPTION);
-		privateKeyPath = Utils.toNonNullPath(RSAEncoder.PRIVATE_KEY_OPTION);
+		publicKeyPath = Utils.toNonNullPath(PUBLIC_KEY_OPTION);
+		privateKeyPath = Utils.toNonNullPath(PRIVATE_KEY_OPTION);
 	}
 	
 	public static void main(String[] args) {
-		Options.get();	// Init options
+		if(!Utils.initProgram(LOGGER)) {
+			return;
+		}
+		setFileLogger();
 		
-		System.out.println("Generating keys...");
+		LOGGER.info("Generating keys...");
 		
 		try {
 			new RSAKeyGenerator().generateKeys(DEFAULT_KEY_SIZE);
 		} catch (NoSuchAlgorithmException | IOException e) {
-			System.err.println("Key generation failed: " + e.getMessage());
-			e.printStackTrace();
+			LOGGER.log(Level.SEVERE, e, () -> "Key generation failed!");
 		}
 		
-		System.out.println("Keys generated");
+		LOGGER.info("Keys generated");
 	}
 	
 	/** Generate an RSA Key pair and saves them to the paths set by options
@@ -59,7 +63,7 @@ public class RSAKeyGenerator {
 	 * @throws IOException
 	 */
 	private void writeKeys(KeyPair pair) throws IOException {
-		System.out.println("Writing keys to \"" + privateKeyPath.toAbsolutePath() + "\" and  \"" + publicKeyPath.toAbsolutePath() + "\"");
+		LOGGER.warning(() -> "Writing keys to \"" + privateKeyPath.toAbsolutePath() + "\" and  \"" + publicKeyPath.toAbsolutePath() + "\"");
 		
 		throwIfExist(privateKeyPath, "private key");
 		throwIfExist(publicKeyPath, "public key");
@@ -77,6 +81,28 @@ public class RSAKeyGenerator {
 			throw new IllegalArgumentException("Can't write " + name + " to " + path.toAbsolutePath() + ": This file already exists!");
 		}
 	}
+	
+	/**
+	 * Set Generator's own logger if it is specified in options
+	 */
+	private static void setFileLogger() {
+		String pathString = System.getProperty(LOG_FILE_OPTION);
+		if(pathString != null) {
+			LoggerHandler.addLogFile(pathString, LOGGER);
+			String level = System.getProperty(LOG_LEVEL_OPTION);
+			LoggerHandler.setLevel(level == null ? DEFAULT_LOG_LEVEL : level, LOGGER);
+		}
+	}
 
 	private static final int DEFAULT_KEY_SIZE = 2048;
+	private static final String DEFAULT_LOG_LEVEL = "WARNING";
+	private static final String PUBLIC_KEY_OPTION = "rsa_kg_public_key_path";
+	private static final String PRIVATE_KEY_OPTION = "rsa_kg_private_key_path";
+	private static final String LOG_FILE_OPTION = "rsa_kg_log_file";
+	private static final String LOG_LEVEL_OPTION = "rsa_kg_log_level";
+	
+	private static final Logger LOGGER = Logger.getLogger(RSAKeyGenerator.class.getCanonicalName());
+	static {
+		LOGGER.setUseParentHandlers(false);
+	}
 }

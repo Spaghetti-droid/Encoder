@@ -53,6 +53,12 @@ public class OptionParser {
 		case MODE_KEY:
 			opt.setMode(value);
 			break;
+		case LOG_FILE_KEY:
+			LoggerHandler.addLogFile(value);
+			break;
+		case LOG_LEVEL_KEY:
+			LoggerHandler.setLevel(value);
+			break;
 		default:
 			// Treat as encoder specific option
 			System.setProperty(key, value);
@@ -65,4 +71,6 @@ public class OptionParser {
 	private static final String OUTPUT_KEY = "output";
 	private static final String ENCODER_KEY = "encoder";
 	private static final String MODE_KEY = "mode";
+	private static final String LOG_FILE_KEY = "log_file";
+	private static final String LOG_LEVEL_KEY = "log_level";
 }

@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
-import fun.gbr.options.Options;
 import fun.gbr.options.Options.Mode;
 
 /**
@@ -21,22 +20,27 @@ public class DictionaryReader implements DictionaryLoader {
 	private Map<String, String> dictionary;
 	private Path path;
 	
-	public DictionaryReader(Path path) throws IOException {
+	/**
+	 * @param path
+	 * @param mode	"decode" will swap keys and values of the returned dictionary
+	 * @throws IOException
+	 */
+	public DictionaryReader(Path path, Mode mode) throws IOException {
 		this.path = path;
 		if(!Files.isReadable(path)) {
 			throw new IllegalArgumentException("Dictionary not readable: " + path.toAbsolutePath());
 		}
-		loadDictionary();
+		loadDictionary(mode);
 	}
 
 	/** Read and parse the dictionary from file
 	 * @throws IOException
 	 */
-	private void loadDictionary() throws IOException {
+	private void loadDictionary(Mode mode) throws IOException {
 		List<String> lines = Files.readAllLines(path);
 		int keyGroup;
 		int valueGroup;
-		if(Mode.encode.equals(Options.get().getMode())) {
+		if(Mode.encode.equals(mode)) {
 			keyGroup = 1;
 			valueGroup = 2;
 		} else {

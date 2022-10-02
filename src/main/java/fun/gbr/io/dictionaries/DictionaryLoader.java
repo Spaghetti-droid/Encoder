@@ -30,7 +30,7 @@ public interface DictionaryLoader {
 				|| (!dictionaryExists && DO_RANDOMISE_VALUE.equals(System.getProperty(RANDOMISE_KEY)));
 		if(!generateRandom) {
 			Logger.getLogger(DictionaryLoader.class.getCanonicalName()).config(() -> "Reading dictionary from \"" + path.toAbsolutePath() + "\"");
-			return new DictionaryReader(path);
+			return new DictionaryReader(path, Options.get().getMode());
 		}
 		Logger.getLogger(DictionaryLoader.class.getCanonicalName()).config(() -> "Writing new dictionary to \"" + path.toAbsolutePath() + "\"");
 		return new DictionaryCreator(path);

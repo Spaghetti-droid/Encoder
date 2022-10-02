@@ -9,19 +9,19 @@ import fun.gbr.tools.ui.ResponseValidator.EmptyValidator;
  * Class for prompting user and recovering their response
  *
  */
-public class UserInputHandler {
+public class UserPrompter {
 	
 	private QuitTrigger quitter = new EmptyQuitter();
 	private ResponseValidator validator = new EmptyValidator();	
 	
 	@SuppressWarnings("hiding")
-	public UserInputHandler withQuitter(QuitTrigger quitter) {
+	public UserPrompter withQuitter(QuitTrigger quitter) {
 		this.quitter = quitter;
 		return this;
 	}
 	
 	@SuppressWarnings("hiding")
-	public UserInputHandler withValidator(ResponseValidator validator) {
+	public UserPrompter withValidator(ResponseValidator validator) {
 		this.validator = validator;
 		return this;
 	}
@@ -36,26 +36,18 @@ public class UserInputHandler {
 	 * @return User response
 	 * @throws UserQuit
 	 */
-	public String treatUserInput(Scanner scanner, String prompt) throws UserQuit {
-		
+	public String queryUser(Scanner scanner, String prompt) throws UserQuit {
+
 		if (scanner == null) {
 			throw new IllegalArgumentException("scanner can't be null");
 		}
 
 		System.out.println(prompt);
+		String reponse = scanner.nextLine();
+		this.quitter.checkIfQuit(scanner, reponse);
 
-		boolean getMoreInput = true;
-		String reponse = null;
-		while (getMoreInput) {
-			reponse = scanner.nextLine();
-			
-			this.quitter.checkIfQuit(reponse);
-			
-			// Check for commands
-			
-			getMoreInput = !this.validator.validate(reponse);
-		}
+		// Check for commands
 
-		return reponse;		
+		return this.validator.validate(scanner, prompt, reponse);
 	}
 }

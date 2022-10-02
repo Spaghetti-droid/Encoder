@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import fun.gbr.options.LoggerHandler;
 import fun.gbr.options.Options;
+import fun.gbr.options.Options.LoggerOptionKeys;
 
 public class Utils {
 	
@@ -49,13 +50,13 @@ public class Utils {
 	}
 	
 	/** Initialise prerequisites for execution
-	 * @param logger if null, root logger is used
+	 * @param lok Options to use for logger settings
 	 * @return true if initialisation was successful, false otherwise
 	 */
-	public static boolean initProgram(Logger logger) {
+	public static boolean initProgram(LoggerOptionKeys lok) {
 		try {
-			LoggerHandler.initLogger(logger);
-			Options.init();
+			LoggerHandler.initLogger();
+			Options.init(lok);
 		} catch(Exception e) {
 			// Log exception if possible
 			Logger.getLogger(Utils.class.getCanonicalName()).log(Level.SEVERE, e, () -> "Error during initialisation!");

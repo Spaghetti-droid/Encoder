@@ -18,8 +18,21 @@ public class Options {
 	 * Load and parse options
 	 */
 	public static void init() {
+		init(null);
+	}
+	
+	/**
+	 * Load and parse options
+	 */
+	public static void init(LoggerOptionKeys lok) {
 		try {
-			singleton = OptionParser.parse(OPTION_FILE_PATH);
+			OptionParser parser;
+			if(lok == null) {
+				parser = new OptionParser();
+			} else {
+				parser = new OptionParser(lok.fileKey, lok.levelKey);
+			}
+			singleton = parser.parse(OPTION_FILE_PATH);
 			Logger.getLogger(Options.class.getCanonicalName()).info(() -> "Loaded " + singleton);
 		} catch (IOException e) {
 			throw new OptionLoadingException("Failed to load options on path: " + OPTION_FILE_PATH.toAbsolutePath(), e);
@@ -113,4 +126,6 @@ public class Options {
 		private static final long serialVersionUID = 4246160215969899495L;
 		
 	}
+	
+	public static record LoggerOptionKeys(String fileKey, String levelKey) {}
 }

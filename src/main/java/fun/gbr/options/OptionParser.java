@@ -13,14 +13,27 @@ import java.util.regex.Pattern;
  */
 public class OptionParser {	
 	
-	private OptionParser() {}
+	private String logFileKey;
+	private String logLevelKey;
 	
+	public OptionParser() {
+		this(null, null);
+	}
+	
+	public OptionParser(String logFileKey, String logLevelKey) {
+		super();
+		this.logFileKey = logFileKey == null ? LOG_FILE_KEY : logFileKey;
+		this.logLevelKey = logLevelKey == null ? LOG_LEVEL_KEY : logLevelKey;
+	}
+
+
+
 	/** Parse file options into an options object and the system properties
 	 * @param optionFilePath
 	 * @return
 	 * @throws IOException
 	 */
-	public static Options parse(Path optionFilePath) throws IOException {
+	public Options parse(Path optionFilePath) throws IOException {		
 		List<String> lines = Files.readAllLines(optionFilePath);
 		
 		Options opt = new Options();
@@ -39,7 +52,7 @@ public class OptionParser {
 	 * @param value
 	 * @param opt
 	 */
-	private static void setOption(String key, String value, Options opt) {
+	private void setOption(String key, String value, Options opt) {		
 		switch (key) {
 		case INPUT_KEY: 
 			opt.setInput(Path.of(value));
@@ -53,18 +66,32 @@ public class OptionParser {
 		case MODE_KEY:
 			opt.setMode(value);
 			break;
-		case LOG_FILE_KEY:
-			LoggerHandler.addLogFile(value);
-			break;
-		case LOG_LEVEL_KEY:
-			LoggerHandler.setLevel(value);
-			break;
-		default:
-			// Treat as encoder specific option
-			System.setProperty(key, value);
+		default:			
+			if(!setLogOption(key, value)) {
+				// Treat as encoder specific option
+				System.setProperty(key, value);
+			}
 		}
 	}
 	
+	
+	/** Sets value as a log option if key corresponds to one
+	 * @param key
+	 * @param value
+	 * @return true if key was a log option, false otherwise
+	 */
+	private boolean setLogOption(String key, String value) {
+		if(logFileKey.equals(key)) {
+			LoggerHandler.addLogFile(value);
+			return true;
+		}
+		if(logLevelKey.equals(key)) {
+			LoggerHandler.setLevel(value);
+			return true;
+		}
+		
+		return false;
+	}
 	
 	private static final Pattern OPTION_PATTERN = Pattern.compile("(\\w+)\\s*:\\s*([^\\s].*[^\\s])\\s*");
 	private static final String INPUT_KEY = "input";

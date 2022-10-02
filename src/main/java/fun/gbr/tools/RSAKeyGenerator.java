@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 import fun.gbr.Utils;
 import fun.gbr.encoders.RSAEncoder;
-import fun.gbr.options.LoggerHandler;
+import fun.gbr.options.Options.LoggerOptionKeys;
 
 /**
  * Tool that generates RSA keys based on options
@@ -28,10 +28,9 @@ public class RSAKeyGenerator {
 	}
 	
 	public static void main(String[] args) {
-		if(!Utils.initProgram(LOGGER)) {
+		if(!Utils.initProgram(LOGGER_OPTION_KEYS)) {
 			return;
 		}
-		setFileLogger();
 		
 		LOGGER.info("Generating keys...");
 		
@@ -81,28 +80,12 @@ public class RSAKeyGenerator {
 			throw new IllegalArgumentException("Can't write " + name + " to " + path.toAbsolutePath() + ": This file already exists!");
 		}
 	}
-	
-	/**
-	 * Set Generator's own logger if it is specified in options
-	 */
-	private static void setFileLogger() {
-		String pathString = System.getProperty(LOG_FILE_OPTION);
-		if(pathString != null) {
-			LoggerHandler.addLogFile(pathString, LOGGER);
-			String level = System.getProperty(LOG_LEVEL_OPTION);
-			LoggerHandler.setLevel(level == null ? DEFAULT_LOG_LEVEL : level, LOGGER);
-		}
-	}
 
 	private static final int DEFAULT_KEY_SIZE = 2048;
-	private static final String DEFAULT_LOG_LEVEL = "WARNING";
 	private static final String PUBLIC_KEY_OPTION = "rsa_kg_public_key_path";
 	private static final String PRIVATE_KEY_OPTION = "rsa_kg_private_key_path";
 	private static final String LOG_FILE_OPTION = "rsa_kg_log_file";
 	private static final String LOG_LEVEL_OPTION = "rsa_kg_log_level";
-	
+	private static final LoggerOptionKeys LOGGER_OPTION_KEYS = new LoggerOptionKeys(LOG_FILE_OPTION, LOG_LEVEL_OPTION);	
 	private static final Logger LOGGER = Logger.getLogger(RSAKeyGenerator.class.getCanonicalName());
-	static {
-		LOGGER.setUseParentHandlers(false);
-	}
 }

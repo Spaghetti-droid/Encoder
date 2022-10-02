@@ -13,7 +13,8 @@ import fun.gbr.options.Options.Mode;
  * A modular encoder with no ui
  * 
  * TODO
- * - Add encoder specific prefixes to their respective options
+ * - Solve text encoding unsuitability issue: some converters produce bytes that are not encodable as text
+ * 	-> Idea: Make converters operate on byte arrays instead. Challenging issues for certain cases.
  * - RSA Key generator only needs some options. Implement partial/progressive loading.
  * - Flexible option file handling allowing several option files if desired
  * - Store encoder options in dedicated map, not system properties (Forces option singleton loading)?

@@ -83,8 +83,8 @@ public class DictionaryCreator implements DictionaryLoader {
 		return this.dictionary;
 	}
 	
-	private static final String KEY_RANGE_KEY = "rand_key_range";
-	private static final String VALUE_RANGE_KEY = "rand_value_range";
+	private static final String KEY_RANGE_KEY = "sub/rand_key_range";
+	private static final String VALUE_RANGE_KEY = "sub/rand_value_range";
 	
 	private static final Pattern RANGE_PATTERN = Pattern.compile("(\\d+)\\s*-\\s*(\\d+)");
 	

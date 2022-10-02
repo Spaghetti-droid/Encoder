@@ -16,8 +16,8 @@ public class ShiftEncoder implements Encoder {
 	private char maxChar = (char) Integer.MAX_VALUE;
 
 	public ShiftEncoder() {
-		if (System.getProperty(SHIFT_KEY) != null) {
-			shift = Integer.valueOf(System.getProperty(SHIFT_KEY));
+		if (System.getProperty(AMOUNT_KEY) != null) {
+			shift = Integer.valueOf(System.getProperty(AMOUNT_KEY));
 		}
 		
 		if(Mode.decode.equals(Options.get().getMode())) {
@@ -63,7 +63,7 @@ public class ShiftEncoder implements Encoder {
 		return "SHIFT";
 	}
 
-	public static final String SHIFT_KEY = "shift";
-	public static final String MIN_CHAR_KEY = "min_char";
-	public static final String MAX_CHAR_KEY = "max_char";
+	public static final String AMOUNT_KEY = "shift/amount";
+	public static final String MIN_CHAR_KEY = "shift/min_char";
+	public static final String MAX_CHAR_KEY = "shift/max_char";
 }

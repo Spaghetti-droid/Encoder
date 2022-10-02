@@ -131,8 +131,8 @@ public class RSAEncoder implements Encoder {
 		return "RSA";
 	}
 	
-	public static final String PUBLIC_KEY_OPTION = "public_key_path";
-	public static final String PRIVATE_KEY_OPTION = "private_key_path";
+	public static final String PUBLIC_KEY_OPTION = "rsa/public_key_path";
+	public static final String PRIVATE_KEY_OPTION = "rsa/private_key_path";
 	public static final String RSA = "RSA";
 	private static final boolean PRIVATE = false;
 	private static final boolean PUBLIC = true;

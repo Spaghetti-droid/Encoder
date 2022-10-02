@@ -34,7 +34,7 @@ public class SubstitutionEncoder implements Encoder {
 	 * Get the default value from properties
 	 */
 	private void initDefaultString() {
-		Matcher matcher = DEF_KEY_PATTERN.matcher(System.getProperty(DEFAULT_KEY, ""));
+		Matcher matcher = DEF_KEY_PATTERN.matcher(System.getProperty(DEFAULT_CHAR_KEY, ""));
 		if(matcher.matches()) {
 			this.defaultSub = matcher.group(1);
 		}
@@ -57,7 +57,7 @@ public class SubstitutionEncoder implements Encoder {
 		return "SUB";
 	}
 
-	private static final String DEFAULT_KEY = "default_if_unknown";
+	private static final String DEFAULT_CHAR_KEY = "sub/default_character";
 	private static final Pattern DEF_KEY_PATTERN = Pattern.compile("\"(.+)\"");
 	
 	/**
@@ -151,7 +151,8 @@ public class SubstitutionEncoder implements Encoder {
 			if(def == null) {
 				handleUnknowns(forOut);
 			} else {
-				handleUnknowns(def, forOut);			}
+				handleUnknowns(def, forOut);			
+			}
 			
 			return forOut;
 		}		

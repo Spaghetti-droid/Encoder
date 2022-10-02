@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
 
 import fun.gbr.Utils;
 import fun.gbr.options.Options;
@@ -23,7 +22,6 @@ import fun.gbr.options.Options.Mode;
 public class OTPEncoder implements Encoder {
 	
 	private Path otpPath;
-	private boolean asHex;
 	private boolean decode;
 	private boolean generateOTP;
 	
@@ -36,7 +34,6 @@ public class OTPEncoder implements Encoder {
 		if(!generateOTP && !Files.isReadable(otpPath)) {
 			throw new IllegalArgumentException("One Time Pad not readable: " + otpPath.toAbsolutePath());
 		}
-		asHex = "true".equals(System.getProperty(AS_HEX_KEY));
 	}
 
 	@Override
@@ -44,13 +41,7 @@ public class OTPEncoder implements Encoder {
 		
 		// Convert text to bits
 		
-		byte[] textBytes;
-		if(asHex && decode) {
-			textBytes = Hex.decodeHex(text);
-		} else {
-			textBytes = text.getBytes(StandardCharsets.UTF_8);
-		}
-		
+		byte[] textBytes = text.getBytes(StandardCharsets.UTF_8);		
 		BitSet textBits = BitSet.valueOf(textBytes);
 		
 		// Get OTP
@@ -77,9 +68,6 @@ public class OTPEncoder implements Encoder {
 		
 		// Build encoded String
 		
-		if(asHex && !decode) {
-			return Hex.encodeHexString(encodedBytes);
-		}
 		return new String(encodedBytes, StandardCharsets.UTF_8);
 	}
 	
@@ -142,7 +130,6 @@ public class OTPEncoder implements Encoder {
 		return "OTP";
 	}
 	
-	private static final String OTP_FILE_PATH_KEY = "otp_file_path";
-	private static final String AS_HEX_KEY = "encoded_as_hex";
-	private static final String GENERATE_KEY = "generate_if_no_key";
+	private static final String OTP_FILE_PATH_KEY = "otp/file_path";
+	private static final String GENERATE_KEY = "otp/generate_if_no_key";
 }

@@ -82,10 +82,10 @@ public class RSAKeyGenerator {
 	}
 
 	private static final int DEFAULT_KEY_SIZE = 2048;
-	private static final String PUBLIC_KEY_OPTION = "rsa_kg_public_key_path";
-	private static final String PRIVATE_KEY_OPTION = "rsa_kg_private_key_path";
-	private static final String LOG_FILE_OPTION = "rsa_kg_log_file";
-	private static final String LOG_LEVEL_OPTION = "rsa_kg_log_level";
+	private static final String PUBLIC_KEY_OPTION = "rsa_kg/public_key_path";
+	private static final String PRIVATE_KEY_OPTION = "rsa_kg/private_key_path";
+	private static final String LOG_FILE_OPTION = "rsa_kg/log_file";
+	private static final String LOG_LEVEL_OPTION = "rsa_kg/log_level";
 	private static final LoggerOptionKeys LOGGER_OPTION_KEYS = new LoggerOptionKeys(LOG_FILE_OPTION, LOG_LEVEL_OPTION);	
 	private static final Logger LOGGER = Logger.getLogger(RSAKeyGenerator.class.getCanonicalName());
 }

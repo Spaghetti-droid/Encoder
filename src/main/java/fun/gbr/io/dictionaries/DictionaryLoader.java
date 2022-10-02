@@ -36,8 +36,8 @@ public interface DictionaryLoader {
 		return new DictionaryCreator(path);
 	}
 	
-	public static final String DICTIONARY_PATH_KEY = "dictionary_path";
-	public static final String RANDOMISE_KEY = "generate_dictionary_if_absent";
+	public static final String DICTIONARY_PATH_KEY = "sub/dictionary_path";
+	public static final String RANDOMISE_KEY = "sub/generate_dictionary_if_absent";
 	public static final String DO_RANDOMISE_VALUE = "true";
 	public static final Pattern DICTIONARY_ENTRY_PATTERN = Pattern.compile("\"(.+)\"\\s+\"(.*)\"");
 }

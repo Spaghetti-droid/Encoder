@@ -17,11 +17,7 @@ import fun.gbr.options.Options.Mode;
  * - RSA Key generator only needs some options. Implement partial/progressive loading.
  * - Flexible option file handling allowing several option files if desired
  * - Store encoder options in dedicated map, not system properties (Forces option singleton loading)?
- * - logs
  * - Issue: SubstitutionEncoder is not reliable when converting from patterns containing more than one character
- * - Sub dic maker: Give option to append
- * - Sub dic maker: Warn if resetting previous value and display old value
- * - Sub dic maker: Make path existing a validation failure rather than an exception
  *
  */
 public class Launcher {	

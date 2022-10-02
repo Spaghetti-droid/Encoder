@@ -93,7 +93,8 @@ public class OptionParser {
 		return false;
 	}
 	
-	private static final Pattern OPTION_PATTERN = Pattern.compile("(\\w+)\\s*:\\s*([^\\s].*[^\\s])\\s*");
+	// Matches [<a_prefix>/]<opt_name> : <opt_value>
+	private static final Pattern OPTION_PATTERN = Pattern.compile("(\\w+\\/?\\w+)\\s*:\\s*([^\\s].*[^\\s])\\s*");
 	private static final String INPUT_KEY = "input";
 	private static final String OUTPUT_KEY = "output";
 	private static final String ENCODER_KEY = "encoder";

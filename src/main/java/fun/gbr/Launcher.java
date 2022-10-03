@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import fun.gbr.encoders.EncoderSelector;
 import fun.gbr.io.FetcherFactory;
+import fun.gbr.io.Returner;
 import fun.gbr.io.ReturnerFactory;
 import fun.gbr.options.Options;
 import fun.gbr.options.Options.Mode;
@@ -15,6 +16,7 @@ import fun.gbr.options.Options.Mode;
  * TODO
  * - Solve text encoding unsuitability issue: some converters produce bytes that are not encodable as text
  * 	-> Idea: Make converters operate on byte arrays instead. Challenging issues for certain cases.
+ * - make input fetcher read more gradually 
  * - RSA Key generator only needs some options. Implement partial/progressive loading.
  * - Flexible option file handling allowing several option files if desired
  * - Store encoder options in dedicated map, not system properties (Forces option singleton loading)?
@@ -33,18 +35,22 @@ public class Launcher {
 			
 			// Read input
 
-			String text = FetcherFactory.build().getInput();
-			LOGGER.info(() -> "Input: " + text);
+			byte[] bytes = FetcherFactory.build().getInput();
+			LOGGER.info(() -> "Input: " + new String(bytes, Options.get().charset()));
 
 			// Call encoder
 
-			String encoded = EncoderSelector.build().convert(text);
-			LOGGER.info(() -> (Mode.encode.equals(Options.get().getMode()) ? "Encoded as " : "Decoded to ") + encoded);
+			byte[] encoded = EncoderSelector.build().convert(bytes);
+			LOGGER.info(() -> (Mode.encode.equals(Options.get().getMode()) ? "Encoded as " : "Decoded to ") + new String(encoded, Options.get().charset()));
 
 			// Output encoded
 
+			// save bytes here
 			LOGGER.info(() -> "Writing to " + Options.get().getOutput().toAbsolutePath());
-			ReturnerFactory.build().writeOut(makeOperationLabel()  + " : " + encoded + '\n');
+			Returner ret = ReturnerFactory.build();
+			ret.writeOut(makeOperationLabel()  + " : ");
+			ret.writeOut(encoded);
+			ret.writeOut("\n");
 
 			LOGGER.info("Done");
 			

@@ -1,6 +1,8 @@
 package fun.gbr.options;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
@@ -56,8 +58,15 @@ public class Options {
 	private Path output = DEFAULT_OUTPUT;
 	private String encoder;	
 	private Mode mode;
+	private Charset charset = StandardCharsets.UTF_8;
 	
+	public Charset charset() {
+		return charset;
+	}
 	
+	public boolean decode() {
+		return Mode.decode.equals(mode);
+	}
 	public Path getInput() {
 		return input;
 	}

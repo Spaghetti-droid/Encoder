@@ -1,7 +1,6 @@
 package fun.gbr.encoders;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.InvalidKeyException;
@@ -13,7 +12,6 @@ import java.security.spec.EncodedKeySpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -60,50 +58,24 @@ public class RSAEncoder implements Encoder {
 	}
 
 	@Override
-	public String convert(String text) throws Exception {
+	public byte[] convert(byte[] bytes) throws Exception {
 		if(decode) {
-			return decode(text);
-		}
-		
-		return encode(text);
+			return decode(bytes);
+		}		
+		return encode(bytes);
 	}
 	
-	/**
-	 * @param text Base64 encoded, RSA encrypted
-	 * @return
-	 * @throws NoSuchAlgorithmException
-	 * @throws NoSuchPaddingException
-	 * @throws InvalidKeyException
-	 * @throws InvalidKeySpecException
-	 * @throws IOException
-	 * @throws IllegalBlockSizeException
-	 * @throws BadPaddingException
-	 */
-	private String decode(String text) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidKeySpecException, IOException, IllegalBlockSizeException, BadPaddingException {
-		byte[] bytes = Base64.getDecoder().decode(text);
+	private byte[] decode(byte[] bytes) throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException, IOException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
 		Cipher cipher = Cipher.getInstance(RSA);
 		cipher.init(Cipher.DECRYPT_MODE, loadKey(privateKeyPath, PRIVATE));
-		byte[] decryptedBytes = cipher.doFinal(bytes);
-		return new String(decryptedBytes, StandardCharsets.UTF_8);
+		return cipher.doFinal(bytes);
 	}
 	
-	/**
-	 * @param text
-	 * @return text, RSA encrypted, Base64 encoded
-	 * @throws NoSuchAlgorithmException
-	 * @throws IOException
-	 * @throws InvalidKeySpecException
-	 * @throws InvalidKeyException
-	 * @throws NoSuchPaddingException
-	 * @throws IllegalBlockSizeException
-	 * @throws BadPaddingException
-	 */
-	private String encode(String text) throws NoSuchAlgorithmException, IOException, InvalidKeySpecException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {		
+	private byte[] encode(byte[] bytes) throws NoSuchAlgorithmException, IOException, InvalidKeySpecException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {		
 		PublicKey key = (PublicKey) loadKey(publicKeyPath, PUBLIC);		
 		Cipher encryptCipher = Cipher.getInstance(RSA);
 		encryptCipher.init(Cipher.ENCRYPT_MODE, key);
-		byte[] encryptedMessageBytes = encryptCipher.doFinal(text.getBytes(StandardCharsets.UTF_8));		
-		return Base64.getEncoder().encodeToString(encryptedMessageBytes);
+		return encryptCipher.doFinal(bytes);		
 	}
 	
 	/** Load a key from a file

@@ -5,7 +5,6 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import fun.gbr.options.LoggerHandler;
 import fun.gbr.options.Options;
 import fun.gbr.options.Options.LoggerOptionKeys;
 
@@ -55,7 +54,7 @@ public class Utils {
 	 */
 	public static boolean initProgram(LoggerOptionKeys lok) {
 		try {
-			LoggerHandler.initLogger();
+			Logger.getLogger("").setLevel(Level.WARNING); // Use warning as default log level
 			Options.init(lok);
 		} catch(Exception e) {
 			// Log exception if possible

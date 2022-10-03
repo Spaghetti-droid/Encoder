@@ -16,19 +16,16 @@ public class FileFetcher implements Fetcher {
 	public FileFetcher(Path inputFile) {
 		this.path = inputFile;
 	}
-
+	
 	@Override
-	public String getInput() throws IOException {
-
+	public byte[] getInput() throws IOException {
 		if (!Files.isReadable(path)) {
 			if(!Files.exists(path)) {
 				throw new IOException("Input file not found!");
 			}
 			throw new IOException("Input file isn't readable!");
 		}
-
-		try(var stream = Files.lines(path)) {
-			return stream.collect(Collectors.joining("\n"));
-		} 
+		
+		return Files.readAllBytes(path);
 	}
 }

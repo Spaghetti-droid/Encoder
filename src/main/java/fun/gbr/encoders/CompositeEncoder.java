@@ -23,18 +23,17 @@ public class CompositeEncoder implements Encoder {
 			Collections.reverse(components);
 		}
 	}
-
-
+	
 	@Override
-	public String convert(String text) throws Exception {
+	public byte[] convert(byte[] bytes) throws Exception {
 		for(Encoder component : components) {
 			try {
-				text = component.convert(text);
+				bytes = component.convert(bytes);
 			} catch(Exception e) {
 				throw new ComponentFailureException("Chained encoder " + component.getName() + " failed: " + e.getMessage(), e);
 			}
 		}
-		return text;
+		return bytes;
 	}
 	
 	@Override

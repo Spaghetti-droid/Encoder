@@ -1,15 +1,12 @@
 package fun.gbr.encoders;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.BitSet;
 import java.util.List;
 import java.util.logging.Logger;
-
-import org.apache.commons.codec.DecoderException;
 
 import fun.gbr.Utils;
 import fun.gbr.options.Options;
@@ -35,40 +32,33 @@ public class OTPEncoder implements Encoder {
 			throw new IllegalArgumentException("One Time Pad not readable: " + otpPath.toAbsolutePath());
 		}
 	}
-
+	
 	@Override
-	public String convert(String text) throws DecoderException, IOException {
-		
-		// Convert text to bits
-		
-		byte[] textBytes = text.getBytes(StandardCharsets.UTF_8);		
-		BitSet textBits = BitSet.valueOf(textBytes);
+	public byte[] convert(byte[] bytes) throws Exception {
+		BitSet bits = BitSet.valueOf(bytes);
 		
 		// Get OTP
 		
-		BitSet otpBits = getOTP(textBytes.length);
-		
-		if(otpBits.length() < textBits.length() && !decode) {
+		BitSet otp = getOTP(bytes.length);		
+		if(otp.length() < bits.length() && !decode) {
 			Logger.getLogger(this.getClass().getCanonicalName()).warning("OTP is shorter than input text. It will have to be applied several times!");
 		}
 		
 		// Apply OTP, reapplying if it isn't long enough
 		
-		byte[] encodedBytes = new byte[textBytes.length];
+		byte[] encoded = new byte[bytes.length];
 		int offset = 0;
-		for(int i=0; i<textBits.size(); i+=otpBits.size()) {			
-			int chunkEnd = i + otpBits.size();
-			if(chunkEnd>textBits.size()) {
-				chunkEnd = textBits.size();
+		for(int i=0; i<bits.size(); i+=otp.size()) {			
+			int chunkEnd = i + otp.size();
+			if(chunkEnd>bits.size()) {
+				chunkEnd = bits.size();
 			}
-			BitSet converted = textBits.get(i, chunkEnd);
-			converted.xor(otpBits);
-			offset = add(converted.toByteArray(), encodedBytes, offset);
+			BitSet encodedBits = bits.get(i, chunkEnd);
+			encodedBits.xor(otp);
+			offset = add(encodedBits.toByteArray(), encoded, offset);
 		}
 		
-		// Build encoded String
-		
-		return new String(encodedBytes, StandardCharsets.UTF_8);
+		return encoded;		
 	}
 	
 	/** Add everything in source to target from offset.
@@ -87,35 +77,35 @@ public class OTPEncoder implements Encoder {
 	}
 	
 	/** Obtain a one time pad
-	 * @param textLength
+	 * @param bytesLength
 	 * @return
 	 * @throws IOException
 	 */
-	private BitSet getOTP(int textLength) throws IOException {
+	private BitSet getOTP(int bytesLength) throws IOException {
 		if(generateOTP) {
-			return generateOTP(textLength);
+			return generateOTP(bytesLength);
 		}
 		
 		// Read if not generating
 		
 		try(var is = Files.newInputStream(otpPath, StandardOpenOption.READ)){
 			// Only get the amount of the otp we need for encoding.
-			return BitSet.valueOf(is.readNBytes(textLength));	
+			return BitSet.valueOf(is.readNBytes(bytesLength));	
 		}
 	}
 	
 	/** Generate a random one time pad and write it to the file given by otpPath
-	 * @param textLength
+	 * @param bytesLength
 	 * @return the otp
 	 * @throws IOException
 	 */
-	private BitSet generateOTP(int textLength) throws IOException {
+	private BitSet generateOTP(int bytesLength) throws IOException {
 		
 		// Create random OTP
 		
-		byte[] otp = new byte[textLength];
-		List<Byte> otpList = Utils.getRandom().ints(textLength, Byte.MIN_VALUE, Byte.MAX_VALUE).boxed().map(Integer::byteValue).toList();
-		for(int i=0; i<textLength; i++) {
+		byte[] otp = new byte[bytesLength];
+		List<Byte> otpList = Utils.getRandom().ints(bytesLength, Byte.MIN_VALUE, Byte.MAX_VALUE).boxed().map(Integer::byteValue).toList();
+		for(int i=0; i<bytesLength; i++) {
 			otp[i] = otpList.get(i);
 		}
 		

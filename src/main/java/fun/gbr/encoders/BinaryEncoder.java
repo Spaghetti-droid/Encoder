@@ -1,11 +1,6 @@
 package fun.gbr.encoders;
 
-import java.nio.charset.StandardCharsets;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import fun.gbr.options.Options;
-import fun.gbr.options.Options.Mode;
 
 /**
  * Encode to and from binary
@@ -14,54 +9,52 @@ import fun.gbr.options.Options.Mode;
 public class BinaryEncoder implements Encoder {
 
 	@Override
-	public String convert(String text){
-		if(Mode.decode.equals(Options.get().getMode())) {
-			return decode(text);
+	public byte[] convert(byte[] bytes) throws Exception {		
+		if(Options.get().decode()) {
+			decode(bytes);
 		}
-		return encode(text);
+		
+		return encode(bytes);
 	}
 	
-	private static String decode(String text) {
+	/** Convert bytes representing binary to bytes representing the 8-bit equivalent
+	 * @param bytes must be a combination of the bytes for 0 and 1
+	 * @return bytes for the 8-bit array equivalent of the binary string
+	 */
+	private static byte[] decode(byte[] bytes) {
 		
 		// Check if binary
 		
-		Matcher matcher = BINARY_PATTERN.matcher(text);
-		if(!matcher.matches()) {
-			throw new IllegalArgumentException("Input text is not binary!");
+		for(byte b : bytes) {
+			if(b != '0' && b != '1') {
+				throw new IllegalArgumentException("Input is not binary!");
+			}
 		}
 		
-		// Remove leading and trailing white space
+		// Convert to bit array
 		
-		text = matcher.group(1); 
-		
-		// Convert to BitSet
-		
-		boolean[] bits = new boolean[text.length()];
-		for(int i=0; i<text.length(); i++) {
-			if(text.charAt(i) == '1') {
-				bits[i] = true;
-			}
+		boolean[] bits = new boolean[bytes.length];
+		for(int i=0; i<bytes.length; i++) {
+			bits[i] = bytes[i] == '1';
 		}
 		
 		// Convert BitSet to bytes and then String
 		
-		byte[] bytes = bitsToBytes(bits);
-		return new String(bytes, StandardCharsets.UTF_8);		
+		return bitsToBytes(bits);		
 	}
 	
-	private static String encode(String text) {
-		
-		// Convert to BitSet
-		
-		boolean[] bits = bytesToBits(text.getBytes(StandardCharsets.UTF_8));
-		
-		// Write BitSet as String
-		
-		StringBuilder builder = new StringBuilder(bits.length);
+	/** Convert 8-bit char bytes to a series of 1s and 0s in byte form
+	 * @param bytes
+	 * @return
+	 */
+	private static byte[] encode(byte[] bytes) {
+		boolean[] bits = bytesToBits(bytes);
+		byte[] encoded = new byte[bits.length];
 		for(int i=0; i<bits.length; i++) {
-			builder.append(bits[i] ? 1 : 0);
-		}	
-		return builder.toString();
+			encoded[i] = (byte) (bits[i] ? '1' : '0');
+		}
+		
+		return encoded;
 	}
 	
 	/** Turn array of bytes into array of booleans, each representing 1 bit
@@ -96,7 +89,5 @@ public class BinaryEncoder implements Encoder {
 	@Override
 	public String getName() {
 		return "BIN";
-	} 
-	
-	private static final Pattern BINARY_PATTERN = Pattern.compile("\\s*([01]+)\\s*");	
+	} 	
 }

@@ -22,13 +22,18 @@ public class FileReturner implements Returner {
 	public FileReturner(Path output) {
 		this.output = output;
 	}
-
+	
 	@Override
-	public void writeOut(String encoded) {
+	public void writeOut(String result) {
+		writeOut(result.getBytes(Options.get().charset()));
+	}
+	
+	@Override
+	public void writeOut(byte[] result) {
 		// No point throwing exception as normal exception handling uses writeOut
 		if(!Files.exists(output) || Files.isWritable(output)) {
 			try {
-				Files.writeString(output, encoded, StandardOpenOption.APPEND, StandardOpenOption.CREATE);
+				Files.write(output, result, StandardOpenOption.APPEND, StandardOpenOption.CREATE);
 			} catch (IOException e) {
 				Logger.getLogger(this.getClass().getCanonicalName()).log(Level.SEVERE, e, () -> "Can't write to " + output +"! " + e.getMessage());
 			}

@@ -39,22 +39,29 @@ public class ShiftEncoder implements Encoder {
 			maxChar = temp;
 		}		
 	}
-
+	
 	@Override
-	public String convert(String text) {
-		StringBuilder builder = new StringBuilder();
-		text.chars().map(c -> {
-			c = c + shift;
-			if(c < minChar || c > maxChar) {
-				if( c > 0 ) {
-					c = minChar + Math.floorMod(c, maxChar-minChar);
-				} else {
-					c = maxChar + Math.floorMod(c, maxChar-minChar);
-				}
+	public byte[] convert(byte[] bytes) throws Exception {		
+		String text = new String(bytes, Options.get().charset());
+		StringBuilder builder = new StringBuilder(text.length());
+		text.codePoints().map(this::shiftChar).forEach(builder::appendCodePoint);
+		return builder.toString().getBytes(Options.get().charset());
+	}
+	
+	/** Shift a code point
+	 * @param c
+	 * @return
+	 */
+	private int shiftChar(int c) {
+		c = c + shift;
+		if(c < minChar || c > maxChar) {
+			if( c > 0 ) {
+				c = minChar + Math.floorMod(c, maxChar-minChar);
+			} else {
+				c = maxChar + Math.floorMod(c, maxChar-minChar);
 			}
-			return c;
-		}).forEach(builder::appendCodePoint);
-		return builder.toString();
+		}
+		return c;
 	}
 	
 

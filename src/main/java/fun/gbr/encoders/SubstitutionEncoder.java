@@ -40,16 +40,25 @@ public class SubstitutionEncoder implements Encoder {
 		}
 	}
 	
+//	@Override
+//	public String convert(String text) {
+//		var subH = new SubstitutionHandler(text);
+//		var dicIter = this.dictionary.entrySet().iterator();
+//		while(!subH.isDone() && dicIter.hasNext()) {
+//			var entry = dicIter.next();
+//			subH.substitute(entry.getKey(), entry.getValue());
+//		}
+//		
+//		return subH.getEncoded(defaultSub);
+//	}
+	
 	@Override
-	public String convert(String text) {
-		var subH = new SubstitutionHandler(text);
-		var dicIter = this.dictionary.entrySet().iterator();
-		while(!subH.isDone() && dicIter.hasNext()) {
-			var entry = dicIter.next();
-			subH.substitute(entry.getKey(), entry.getValue());
-		}
+	public byte[] convert(byte[] bytes) throws Exception {
 		
-		return subH.getEncoded(defaultSub);
+		// Use stream to convert Map<String, String> to Map<byte[], byte[]> ( but slightly more complicated, because the byte arrays need to be compared)
+		// iterate through byte array, checking blocks of bytes vs map (biggest key to smallest). If bloc not found advance 2 bytes (1 char), keeping those 2.
+		
+		throw new IllegalStateException("Not implemented");
 	}
 	
 	@Override

@@ -17,6 +17,8 @@ import fun.gbr.options.Options.Mode;
  * - make input fetcher read more gradually 
  * - Flexible option file handling allowing several option files if desired
  * - Add option to OTP to rsa-encode/decode key
+ * - Implement unit testing
+ * - See if there is an easy way to have multi executable compilation while keeping dependencies separate from jars
  *
  */
 public class Launcher {	

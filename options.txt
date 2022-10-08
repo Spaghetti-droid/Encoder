@@ -1,5 +1,5 @@
 # Mode: encode or decode. Decode assumes you want to decode a message that was encoded based on these options
-mode	:	decode
+mode	:	encode
 # input and output paths
 input 	: 	input.txt
 output 	: 	output.txt
@@ -16,7 +16,7 @@ output 	: 	output.txt
 #	- TRANSLATE
 # You can chain several encoders by separating them with '+'. 
 # For example use "RSA+B64" to encrypt using RSA, then encode the encrypted text in Base 64.
-encoder	:	SHIFT+SUB+BIN+HEX+OTP+RSA+B64
+encoder	:	SHIFT
 
 # Logging properties
 # Levels are ALL, FINEST, FINER, FINE, INFO, WARNING, SEVERE, OFF

@@ -16,9 +16,7 @@ import fun.gbr.options.Options.Mode;
  * TODO
  * - make input fetcher read more gradually 
  * - Flexible option file handling allowing several option files if desired
- * - Store encoder options in dedicated map, not system properties (Forces option singleton loading)?
  * - Add option to OTP to rsa-encode/decode key
- * - Issue: Shift doesn't loop properly
  *
  */
 public class Launcher {	

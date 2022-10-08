@@ -53,15 +53,7 @@ public class ShiftEncoder implements Encoder {
 	 * @return
 	 */
 	private int shiftChar(int c) {
-		c = c + shift;
-		if(c < minChar || c > maxChar) {
-			if( c > 0 ) {
-				c = minChar + Math.floorMod(c, maxChar-minChar);
-			} else {
-				c = maxChar + Math.floorMod(c, maxChar-minChar);
-			}
-		}
-		return c;
+		return minChar + Math.floorMod(c+shift-minChar, maxChar-minChar+1);
 	}
 	
 

@@ -21,7 +21,7 @@ public class Utils {
 	 * @return The path for the dictionary set by the user
 	 */
 	public static Path getDictionaryPath(String key) {
-		String path = System.getProperty(key);
+		String path = Options.get().property(key);
 		if(path == null) {
 			throw new IllegalArgumentException(key + " not specified");
 		}
@@ -34,7 +34,7 @@ public class Utils {
 	 * @return Path equivalent of property
 	 */
 	public static Path toNonNullPath(String propertyName) {
-		String pathString = System.getProperty(propertyName);
+		String pathString = Options.get().property(propertyName);
 		if(pathString == null) {
 			throw new IllegalArgumentException(propertyName + " must be specified.");
 		}

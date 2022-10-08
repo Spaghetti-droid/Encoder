@@ -24,8 +24,8 @@ public class OTPEncoder implements Encoder {
 	
 	public OTPEncoder(){
 		otpPath = Utils.getDictionaryPath(OTP_FILE_PATH_KEY);
-		decode = Mode.decode.equals(Options.get().getMode());
-		generateOTP = "true".equals(System.getProperty(GENERATE_KEY)) 
+		decode = Mode.decode.equals(Options.get().mode());
+		generateOTP = "true".equals(Options.get().property(GENERATE_KEY)) 
 				&& !decode 
 				&& !Files.exists(otpPath);
 		if(!generateOTP && !Files.isReadable(otpPath)) {

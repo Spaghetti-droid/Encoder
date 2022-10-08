@@ -15,7 +15,7 @@ import fun.gbr.options.Options;
  */
 public class FileReturner implements Returner {
 	
-	private Path output = Options.get().getOutput();
+	private Path output = Options.get().output();
 	
 	public FileReturner() {}
 	

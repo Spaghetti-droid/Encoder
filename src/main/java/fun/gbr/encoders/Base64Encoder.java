@@ -13,7 +13,7 @@ public class Base64Encoder implements Encoder {
 	
 	@Override
 	public byte[] convert(byte[] bytes) throws Exception {
-		if(Mode.decode.equals(Options.get().getMode())) {
+		if(Mode.decode.equals(Options.get().mode())) {
 			return Base64.getDecoder().decode(bytes);
 		}
 		

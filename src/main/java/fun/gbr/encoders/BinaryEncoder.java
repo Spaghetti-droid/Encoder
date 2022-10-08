@@ -10,7 +10,7 @@ public class BinaryEncoder implements Encoder {
 
 	@Override
 	public byte[] convert(byte[] bytes) throws Exception {		
-		if(Options.get().decode()) {
+		if(Options.get().doDecode()) {
 			return decode(bytes);
 		}
 		

@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import fun.gbr.io.dictionaries.DictionaryLoader;
+import fun.gbr.options.Options;
 
 /**
  * Encodes using substitution
@@ -34,7 +35,7 @@ public class SubstitutionEncoderOLD implements Encoder {
 	 * Get the default value from properties
 	 */
 	private void initDefaultString() {
-		Matcher matcher = DEF_KEY_PATTERN.matcher(System.getProperty(DEFAULT_CHAR_KEY, ""));
+		Matcher matcher = DEF_KEY_PATTERN.matcher(Options.get().property(DEFAULT_CHAR_KEY, ""));
 		if(matcher.matches()) {
 			this.defaultSub = matcher.group(1);
 		}

@@ -16,20 +16,20 @@ public class ShiftEncoder implements Encoder {
 	private char maxChar = (char) Integer.MAX_VALUE;
 
 	public ShiftEncoder() {
-		if (System.getProperty(AMOUNT_KEY) != null) {
-			shift = Integer.valueOf(System.getProperty(AMOUNT_KEY));
+		if (Options.get().property(AMOUNT_KEY) != null) {
+			shift = Integer.valueOf(Options.get().property(AMOUNT_KEY));
 		}
 		
-		if(Mode.decode.equals(Options.get().getMode())) {
+		if(Mode.decode.equals(Options.get().mode())) {
 			shift = -shift;
 		}
 
-		if (System.getProperty(MIN_CHAR_KEY) != null) {
-			minChar = System.getProperty(MIN_CHAR_KEY).charAt(0);
+		if (Options.get().property(MIN_CHAR_KEY) != null) {
+			minChar = Options.get().property(MIN_CHAR_KEY).charAt(0);
 		}
 
-		if (System.getProperty(MAX_CHAR_KEY) != null) {
-			maxChar = System.getProperty(MAX_CHAR_KEY).charAt(0);
+		if (Options.get().property(MAX_CHAR_KEY) != null) {
+			maxChar = Options.get().property(MAX_CHAR_KEY).charAt(0);
 		}
 		
 		if(minChar>maxChar) {

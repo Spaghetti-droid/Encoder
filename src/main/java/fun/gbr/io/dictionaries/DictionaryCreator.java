@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import fun.gbr.Utils;
+import fun.gbr.options.Options;
 import fun.gbr.tools.SubstitutionDictionaryMaker;
 
 /**
@@ -27,8 +28,8 @@ public class DictionaryCreator implements DictionaryLoader {
 
 	public DictionaryCreator(Path path) throws IOException {
 		this.path = path;
-		this.keyPair = parseRange(System.getProperty(KEY_RANGE_KEY));
-		this.valuePair = parseRange(System.getProperty(VALUE_RANGE_KEY));	
+		this.keyPair = parseRange(Options.get().property(KEY_RANGE_KEY));
+		this.valuePair = parseRange(Options.get().property(VALUE_RANGE_KEY));	
 		this.dictionary = new HashMap<>(keyPair.max()-keyPair.min());
 		generate();
 	}

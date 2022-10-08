@@ -6,6 +6,6 @@ public class FetcherFactory {
 	private FetcherFactory() {}
 	
 	public static Fetcher build() {
-		return new FileFetcher(Options.get().getInput());
+		return new FileFetcher(Options.get().input());
 	}
 }

@@ -31,8 +31,8 @@ public class RSAEncoder implements Encoder {
 	private boolean decode;
 	
 	public RSAEncoder() throws IOException {
-		decode = Options.Mode.decode.equals(Options.get().getMode());
-		privateKeyPath = System.getProperty(PRIVATE_KEY_OPTION) == null ? null : Path.of(System.getProperty(PRIVATE_KEY_OPTION)) ;
+		decode = Options.Mode.decode.equals(Options.get().mode());
+		privateKeyPath = Options.get().property(PRIVATE_KEY_OPTION) == null ? null : Path.of(Options.get().property(PRIVATE_KEY_OPTION)) ;
 		if(decode) {
 			if(privateKeyPath == null) {
 				throw new IllegalArgumentException("Private Key must be specified when decoding");
@@ -50,7 +50,7 @@ public class RSAEncoder implements Encoder {
 	 * @return Path equivalent of property
 	 */
 	private static Path toPath(String propertyName) {
-		String pathString = System.getProperty(propertyName);
+		String pathString = Options.get().property(propertyName);
 		if(pathString == null) {
 			throw new IllegalArgumentException(propertyName + " must be specified.");
 		}

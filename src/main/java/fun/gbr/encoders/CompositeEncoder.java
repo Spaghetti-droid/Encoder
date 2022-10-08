@@ -18,7 +18,7 @@ public class CompositeEncoder implements Encoder {
 	public CompositeEncoder(List<Encoder> components) {
 		super();
 		this.components = components;
-		if(Mode.decode.equals(Options.get().getMode())) {
+		if(Mode.decode.equals(Options.get().mode())) {
 			// Decoding is done in the opposite order of encoding
 			Collections.reverse(components);
 		}

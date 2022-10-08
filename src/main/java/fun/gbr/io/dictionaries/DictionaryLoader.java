@@ -24,15 +24,15 @@ public interface DictionaryLoader {
 	 */
 	public static DictionaryLoader initialise() throws IOException {
 		Path path = Utils.getDictionaryPath(DICTIONARY_PATH_KEY);
-		boolean generateRandom = Options.get().encode()
-				&& DO_RANDOMISE_VALUE.equals(System.getProperty(RANDOMISE_KEY))
+		boolean generateRandom = Options.get().doEncode()
+				&& DO_RANDOMISE_VALUE.equals(Options.get().property(RANDOMISE_KEY))
 				&& !Files.exists(path);
 		if(generateRandom) {
 			Logger.getLogger(DictionaryLoader.class.getCanonicalName()).config(() -> "Writing new dictionary to \"" + path.toAbsolutePath() + "\"");
 			return new DictionaryCreator(path);
 		}		
 		Logger.getLogger(DictionaryLoader.class.getCanonicalName()).config(() -> "Reading dictionary from \"" + path.toAbsolutePath() + "\"");
-		return new DictionaryReader(path, Options.get().getMode());
+		return new DictionaryReader(path, Options.get().mode());
 	}
 	
 	public static final String DICTIONARY_PATH_KEY = "sub/dictionary_path";

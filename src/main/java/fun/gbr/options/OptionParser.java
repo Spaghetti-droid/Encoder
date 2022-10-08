@@ -69,7 +69,7 @@ public class OptionParser {
 		default:			
 			if(!setLogOption(key, value)) {
 				// Treat as encoder specific option
-				System.setProperty(key, value);
+				opt.setProperty(key, value);
 			}
 		}
 	}

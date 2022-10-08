@@ -8,7 +8,7 @@ public class HexEncoder implements Encoder {
 	
 	@Override
 	public byte[] convert(byte[] bytes) throws Exception {
-		if(Options.get().decode()) {
+		if(Options.get().doDecode()) {
 			String text = new String(bytes, Options.get().charset());
 			return Hex.decodeHex(text);
 		}

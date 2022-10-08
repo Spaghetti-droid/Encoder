@@ -19,7 +19,7 @@ public class EncoderSelector {
 	
 	public static Encoder build() throws InstantiationException, IllegalAccessException, 
 	IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		return build(Options.get().getEncoderKey());
+		return build(Options.get().encoderKey());
 	}
 
 	public static Encoder build(String encoderKey) throws InstantiationException, IllegalAccessException, 

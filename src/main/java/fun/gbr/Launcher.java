@@ -17,9 +17,8 @@ import fun.gbr.options.Options.Mode;
  * - make input fetcher read more gradually 
  * - Flexible option file handling allowing several option files if desired
  * - Store encoder options in dedicated map, not system properties (Forces option singleton loading)?
+ * - Add option to OTP to rsa-encode/decode key
  * - Issue: Shift doesn't loop properly
- * - Issue: RSA should encode a sym key (such as otp) rather than the data itself. Consider replacing current impl by OTP_WITH_RSA (or something equivalent)
- * This would generate an OTP key, use it to encode the message and then encode the key via RSA 
  *
  */
 public class Launcher {	
@@ -40,12 +39,12 @@ public class Launcher {
 			// Call encoder
 
 			byte[] encoded = EncoderSelector.build().convert(bytes);
-			LOGGER.info(() -> (Mode.encode.equals(Options.get().getMode()) ? "Encoded as " : "Decoded to ") + new String(encoded, Options.get().charset()));
+			LOGGER.info(() -> (Mode.encode.equals(Options.get().mode()) ? "Encoded as " : "Decoded to ") + new String(encoded, Options.get().charset()));
 
 			// Output encoded
 
 			// save bytes here
-			LOGGER.info(() -> "Writing to " + Options.get().getOutput().toAbsolutePath());
+			LOGGER.info(() -> "Writing to " + Options.get().output().toAbsolutePath());
 			Returner ret = ReturnerFactory.build();
 			ret.writeOut(makeOperationLabel()  + " : ");
 			ret.writeOut(encoded);
@@ -65,6 +64,6 @@ public class Launcher {
 	 * 	during this run of the encoder.
 	 */
 	private static String makeOperationLabel() {
-		return Options.get().getMode() + " - " + Options.get().getEncoderKey();
+		return Options.get().mode() + " - " + Options.get().encoderKey();
 	}
 }

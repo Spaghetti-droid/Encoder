@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -59,24 +61,26 @@ public class Options {
 	private String encoder;	
 	private Mode mode;
 	private Charset charset = StandardCharsets.UTF_8;
+	// For encoder-specific options
+	private Map<String, String> properties = new HashMap<>();
 	
 	public Charset charset() {
 		return charset;
 	}
 	
-	public boolean decode() {
+	public boolean doDecode() {
 		return Mode.decode.equals(mode);
 	}	
-	public boolean encode() {
+	public boolean doEncode() {
 		return Mode.encode.equals(mode);
 	}
-	public Path getInput() {
+	public Path input() {
 		return input;
 	}
-	public Path getOutput() {
+	public Path output() {
 		return output;
 	}
-	public String getEncoderKey() {
+	public String encoderKey() {
 		return encoder;
 	}
 	public void setInput(Path input) {
@@ -89,7 +93,7 @@ public class Options {
 		this.encoder = encoder;
 	}
 	
-	public Mode getMode() {
+	public Mode mode() {
 		return mode;
 	}
 	public void setMode(Mode mode) {
@@ -97,6 +101,24 @@ public class Options {
 	}
 	public void setMode(String mode) {
 		this.mode = Mode.valueOf(mode);
+	}	
+	/** Get an encoder specific property
+	 * @param key
+	 * @return
+	 */
+	public String property(String key) {
+		return property(key, null);
+	}	
+	/** Get an encoder-specific property
+	 * @param key
+	 * @param def default value if this property was not found
+	 * @return
+	 */
+	public String property(String key, String def) {
+		return properties.containsKey(key) ? properties.get(key) : def;
+	}	
+	public void setProperty(String key, String value) {
+		this.properties.put(key, value);
 	}
 
 	@Override

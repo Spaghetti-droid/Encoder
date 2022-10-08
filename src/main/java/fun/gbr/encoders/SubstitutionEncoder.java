@@ -64,7 +64,7 @@ public class SubstitutionEncoder implements Encoder {
 	 * Get the default value from properties
 	 */
 	private void initDefaultString() {
-		Matcher matcher = DEF_KEY_PATTERN.matcher(System.getProperty(DEFAULT_CHAR_KEY, ""));
+		Matcher matcher = DEF_KEY_PATTERN.matcher(Options.get().property(DEFAULT_CHAR_KEY, ""));
 		if(matcher.matches()) {
 			this.defaultSub = new CodePointList(matcher.group(1));
 		}

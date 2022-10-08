@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
 
 import fun.gbr.Utils;
 import fun.gbr.options.Options;
-import fun.gbr.options.Options.Mode;
 
 /**
  * Classes implementing this interface must be able to return a dictionary.
@@ -25,15 +24,15 @@ public interface DictionaryLoader {
 	 */
 	public static DictionaryLoader initialise() throws IOException {
 		Path path = Utils.getDictionaryPath(DICTIONARY_PATH_KEY);
-		boolean dictionaryExists = Files.exists(path);
-		boolean generateRandom = Mode.decode.equals(Options.get().getMode()) 
-				|| (!dictionaryExists && DO_RANDOMISE_VALUE.equals(System.getProperty(RANDOMISE_KEY)));
-		if(!generateRandom) {
-			Logger.getLogger(DictionaryLoader.class.getCanonicalName()).config(() -> "Reading dictionary from \"" + path.toAbsolutePath() + "\"");
-			return new DictionaryReader(path, Options.get().getMode());
-		}
-		Logger.getLogger(DictionaryLoader.class.getCanonicalName()).config(() -> "Writing new dictionary to \"" + path.toAbsolutePath() + "\"");
-		return new DictionaryCreator(path);
+		boolean generateRandom = Options.get().encode()
+				&& DO_RANDOMISE_VALUE.equals(System.getProperty(RANDOMISE_KEY))
+				&& !Files.exists(path);
+		if(generateRandom) {
+			Logger.getLogger(DictionaryLoader.class.getCanonicalName()).config(() -> "Writing new dictionary to \"" + path.toAbsolutePath() + "\"");
+			return new DictionaryCreator(path);
+		}		
+		Logger.getLogger(DictionaryLoader.class.getCanonicalName()).config(() -> "Reading dictionary from \"" + path.toAbsolutePath() + "\"");
+		return new DictionaryReader(path, Options.get().getMode());
 	}
 	
 	public static final String DICTIONARY_PATH_KEY = "sub/dictionary_path";

@@ -66,6 +66,9 @@ public class Options {
 	
 	public boolean decode() {
 		return Mode.decode.equals(mode);
+	}	
+	public boolean encode() {
+		return Mode.encode.equals(mode);
 	}
 	public Path getInput() {
 		return input;

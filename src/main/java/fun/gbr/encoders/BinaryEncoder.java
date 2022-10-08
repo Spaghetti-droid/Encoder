@@ -11,7 +11,7 @@ public class BinaryEncoder implements Encoder {
 	@Override
 	public byte[] convert(byte[] bytes) throws Exception {		
 		if(Options.get().decode()) {
-			decode(bytes);
+			return decode(bytes);
 		}
 		
 		return encode(bytes);
@@ -66,7 +66,7 @@ public class BinaryEncoder implements Encoder {
 		int nBits = bytes.length *8;
 		boolean[] bits = new boolean[nBits];
 		for(int i=0; i<nBits; i++) {
-			bits[i] = ((bytes[i/8] & (0b10000000>>(i%8))) != 0);
+			bits[i] = ((bytes[i/8] & 0xff & (0b10000000>>(i%8))) != 0);
 		}
 		return bits;
 	}

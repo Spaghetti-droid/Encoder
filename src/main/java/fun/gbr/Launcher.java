@@ -14,13 +14,12 @@ import fun.gbr.options.Options.Mode;
  * A modular encoder with no ui
  * 
  * TODO
- * - Solve text encoding unsuitability issue: some converters produce bytes that are not encodable as text
- * 	-> Idea: Make converters operate on byte arrays instead. Challenging issues for certain cases.
  * - make input fetcher read more gradually 
- * - RSA Key generator only needs some options. Implement partial/progressive loading.
  * - Flexible option file handling allowing several option files if desired
  * - Store encoder options in dedicated map, not system properties (Forces option singleton loading)?
- * - Issue: SubstitutionEncoder is not reliable when converting from patterns containing more than one character
+ * - Issue: Shift doesn't loop properly
+ * - Issue: RSA should encode a sym key (such as otp) rather than the data itself. Consider replacing current impl by OTP_WITH_RSA (or something equivalent)
+ * This would generate an OTP key, use it to encode the message and then encode the key via RSA 
  *
  */
 public class Launcher {	

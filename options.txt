@@ -1,5 +1,5 @@
 # Mode: encode or decode. Decode assumes you want to decode a message that was encoded based on these options
-mode	:	encode
+mode	:	decode
 # input and output paths
 input 	: 	input.txt
 output 	: 	output.txt
@@ -10,13 +10,13 @@ output 	: 	output.txt
 #	- OTP: One time pad encryption. Chaining with B64 is recommended.
 #	- HEX: Hexadecimal number series 
 #	- BIN: Binary
-#	- RSA: Encrypt with RSA. Chaining with B64 is recommended. Use the RSAKeyGenerator tool to generate RSA keys.
+#	- RSA: Encrypt with RSA. Chaining with B64 is recommended. Use the RSAKeyGenerator tool to generate RSA keys. Does not handle data sizes over 245 bytes, as it's only meant to encrypt keys.
 #	- B64: Base 64 String
-# Planned	
+# Planned (maybe)
 #	- TRANSLATE
 # You can chain several encoders by separating them with '+'. 
 # For example use "RSA+B64" to encrypt using RSA, then encode the encrypted text in Base 64.
-encoder	:	SHIFT
+encoder	:	SHIFT+SUB+BIN+HEX+OTP+RSA+B64
 
 # Logging properties
 # Levels are ALL, FINEST, FINER, FINE, INFO, WARNING, SEVERE, OFF
@@ -44,7 +44,7 @@ sub/rand_key_range : 32-126
 sub/rand_value_range : 32-126
 # The string to replace patterns (characters) that aren't in the dictionary
 # Comment to keep leave unknown patterns unchanged
-##	sub/default_character: 	"?"
+##sub/default_character: 	"?"
 
 
 ### OTP options ###
